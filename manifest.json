@@ -3,7 +3,7 @@
   "name": "K2 CamperBox — Anfrage / Bestellung",
   "short_name": "K2 CamperBox",
   "description": "K2 CamperBox: Anfrage/Bestellung + CRM in Google Sheets.",
-  "start_url": "./?source=pwa",
+  "start_url": "/?source=pwa",
   "scope": "./",
   "display": "standalone",
   "background_color": "#0a0f22",
@@ -12,7 +12,7 @@
   "orientation": "any",
   "icons": [
     {
-      "src": "./icons/icon-192.png",
+      "src": "/icons/icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any maskable"
