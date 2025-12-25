@@ -1,12 +1,12 @@
 const CACHE_NAME = "k2camperbox-v1";
 
 const ASSETS = [
-  "./",
-  "./index.html",
-  "./manifest.json",
-  "./favicon.ico",
-  "./icons/icon-192.png",
-  "./icons/icon-512.png"
+  "/",
+  "/index.html",
+  "/manifest.json",
+  "/favicon.ico",
+  "/icons/icon-192.png",
+  "/icons/icon-512.png"
 ];
 
 self.addEventListener("install", (event) => {
