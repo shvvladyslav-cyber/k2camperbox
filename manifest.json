@@ -1,19 +1,18 @@
 {
   "id": "/?source=pwa",
-  "name": "K2 CamperBox — Auto Camper Modul",
+  "name": "K2 CamperBox",
   "short_name": "K2 CamperBox",
-  "description": "K2 CamperBox: Camping-Modul fürs Auto. Anfrage & Bestellung per Telegram. RU/UA/DE.",
+  "description": "K2 CamperBox: модульный кемпинг-бокс. Заявка в Telegram/WhatsApp.",
   "start_url": "/?source=pwa",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#070b16",
-  "theme_color": "#0b1226",
+  "background_color": "#070a18",
+  "theme_color": "#0a0f22",
   "lang": "ru",
   "orientation": "any",
-  "categories": ["business", "travel", "utilities"],
+  "categories": ["business","travel","utilities"],
   "icons": [
     { "src": "/icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
     { "src": "/icons/icon-512.png", "sizes": "512x512", "type": "image/png" }
   ]
 }
-
