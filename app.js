@@ -1,13 +1,11 @@
-/* K2 CamperBox — premium landing logic (fast, no libs)
-   - i18n (DE/UA/RU)
-   - Premium buttons: ripple + hover shine
-   - Telegram + copy
-   - PWA install
+/* K2 CamperBox — single-file app logic (premium)
+   - Language switch: DE / UA / RU
+   - Telegram request + copy
+   - PWA install button
    - Revolut QR modal
-   - Premium gallery + lightbox (keyboard + swipe)
-   - Reveal-on-scroll micro motion
+   - Premium gallery: lightbox (fast, no libs)
+   - Micro animations: ripple (JS) + shine (CSS)
 */
-
 (() => {
   const $ = (s, root=document) => root.querySelector(s);
   const $$ = (s, root=document) => [...root.querySelectorAll(s)];
@@ -62,9 +60,9 @@
       f_hint:"Damit das Formular funktioniert: Apps Script URL in crm-config.js eintragen. Sonst nutze Telegram.",
       nav_cfg:"Konfigurator", nav_cab:"Cabinet",
       mob_request:"Anfrage", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Cabinet",
-      gallery_premium_title:"Reale Beispiele CamperBox",
-      gallery_premium_sub:"Tippe auf ein Foto — öffnet sich красивый Lightbox.",
-      gallery_note_premium:"Dateien: /assets/gallery-1.jpg … /assets/gallery-4.jpg. Du kannst sie ohne Code-Änderung ersetzen."
+      gallery_title_premium:"Reale Beispiele CamperBox",
+      gallery_sub_premium:"Tippe auf ein Foto — Lightbox, Pfeile, ESC.",
+      gallery_note_premium:"Willst du deine Fotos statt dieser? Tausche Links auf /assets/gallery-1.jpg …"
     },
     ua: {
       nav_models:"Авто", nav_packages:"Пакети", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакти",
@@ -107,9 +105,9 @@
       f_hint:"Щоб форма працювала: встав Apps Script URL у crm-config.js. Якщо не налаштовано — використовуй Telegram.",
       nav_cfg:"Конфігуратор", nav_cab:"Кабінет",
       mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабінет",
-      gallery_premium_title:"Реальні приклади CamperBox",
-      gallery_premium_sub:"Натисни на фото — відкриється красивий Lightbox.",
-      gallery_note_premium:"Файли: /assets/gallery-1.jpg … /assets/gallery-4.jpg. Можна замінити на свої без правок коду."
+      gallery_title_premium:"Реальні приклади CamperBox",
+      gallery_sub_premium:"Натисни на фото — Lightbox, стрілки, ESC.",
+      gallery_note_premium:"Хочеш свої фото? Заміни лінки на /assets/gallery-1.jpg …"
     },
     ru: {
       nav_models:"Авто", nav_packages:"Пакеты", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакты",
@@ -146,15 +144,15 @@
       pay_download:"Скачать QR", pay_close:"Закрыть",
       toast_copied:"Скопировано ✅",
       form_title:"Форма заявки",
-      form_sub:"Отправка заявки в Google Sheets (через Apps Script).",
+      form_sub:"Отправляет заявку в Google Sheets (через Apps Script).",
       f_name:"Имя", f_phone:"Телефон", f_email:"Email", f_car:"Авто/модель", f_msg:"Сообщение",
       f_send:"Отправить в Sheets", f_open_crm:"Открыть Mini-CRM", f_send_tg:"Или отправить в Telegram",
       f_hint:"Чтобы форма работала: вставь Apps Script URL в crm-config.js. Если не настроено — используй Telegram.",
       nav_cfg:"Конфигуратор", nav_cab:"Кабинет",
       mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабинет",
-      gallery_premium_title:"Реальные примеры CamperBox",
-      gallery_premium_sub:"Нажми на фото — откроется красивый Lightbox.",
-      gallery_note_premium:"Файлы: /assets/gallery-1.jpg … /assets/gallery-4.jpg. Можно заменить на свои без правок кода."
+      gallery_title_premium:"Реальные примеры CamperBox",
+      gallery_sub_premium:"Нажми на фото — lightbox, стрелки, ESC.",
+      gallery_note_premium:"Хочешь свои фото? Замени ссылки на /assets/gallery-1.jpg …"
     }
   };
 
@@ -163,33 +161,13 @@
     if(!t){
       t = document.createElement("div");
       t.id = "toast";
-      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(36,48,95,.8);background:rgba(11,18,48,.92);backdrop-filter: blur(10px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease";
+      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:12px;border:1px solid rgba(36,48,95,.8);background:rgba(11,18,48,.92);backdrop-filter: blur(10px);font-weight:900;z-index:220;opacity:0;transition:opacity .15s ease";
       document.body.appendChild(t);
     }
     t.textContent = msg;
     t.style.opacity = "1";
     clearTimeout(toast._tm);
     toast._tm = setTimeout(()=> t.style.opacity="0", 1400);
-  };
-
-  const lang = () => localStorage.getItem("k2_lang") || "de";
-
-  const setLang = (l) => {
-    document.documentElement.lang = l === "ua" ? "uk" : l;
-
-    $$(".chip").forEach(b => {
-      const on = b.dataset.lang === l;
-      b.classList.toggle("active", on);
-      b.setAttribute("aria-pressed", on ? "true" : "false");
-    });
-
-    $$("[data-i18n]").forEach(el => {
-      const key = el.getAttribute("data-i18n");
-      const v = i18n[l]?.[key];
-      if (typeof v === "string") el.textContent = v;
-    });
-
-    localStorage.setItem("k2_lang", l);
   };
 
   const buildMessage = (pkg) => {
@@ -208,48 +186,54 @@
     return lines.join("\n");
   };
 
-  const openTelegram = async (text) => {
-    try { await navigator.clipboard.writeText(text); } catch (_) {}
+  const openTelegram = (text) => {
+    navigator.clipboard?.writeText(text).catch(()=>{});
     window.open(cfg.telegram, "_blank", "noopener");
   };
 
-  // --- Premium micro interactions (shine + ripple)
-  const enablePremiumButtons = () => {
-    const buttons = $$("button.btn.premium, a.btn.premium");
-    const move = (e) => {
-      const el = e.currentTarget;
-      const r = el.getBoundingClientRect();
-      const x = ((e.clientX - r.left) / r.width) * 100;
-      el.style.setProperty("--sx", `${x}%`);
-    };
-    const leave = (e) => e.currentTarget.style.removeProperty("--sx");
-
-    buttons.forEach(el => {
-      el.addEventListener("mousemove", move);
-      el.addEventListener("mouseleave", leave);
-
-      el.addEventListener("click", (e) => {
-        // ripple only for mouse/touch clicks
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX || (r.left + r.width/2)) - r.left;
-        const y = (e.clientY || (r.top + r.height/2)) - r.top;
-
-        const s = document.createElement("span");
-        s.className = "ripple";
-        s.style.left = `${x}px`;
-        s.style.top = `${y}px`;
-        el.appendChild(s);
-        setTimeout(()=> s.remove(), 650);
-      }, { passive: true });
+  const setLang = (lang) => {
+    document.documentElement.lang = lang === "ua" ? "uk" : lang;
+    $$(".chip").forEach(b => {
+      const on = b.dataset.lang === lang;
+      b.classList.toggle("active", on);
+      b.setAttribute("aria-pressed", on ? "true" : "false");
     });
+    $$("[data-i18n]").forEach(el => {
+      const key = el.getAttribute("data-i18n");
+      const v = i18n[lang]?.[key];
+      if (typeof v === "string") el.textContent = v;
+    });
+    localStorage.setItem("k2_lang", lang);
   };
 
-  // --- Modals
-  const payModal = $("#payModal");
-  const openPay = () => { payModal?.classList.add("show"); payModal?.setAttribute("aria-hidden","false"); };
-  const closePay = () => { payModal?.classList.remove("show"); payModal?.setAttribute("aria-hidden","true"); };
+  // Premium Ripple (fast)
+  const addRipple = (btn, ev) => {
+    if (!btn || !btn.classList.contains("ripple")) return;
+    const rect = btn.getBoundingClientRect();
+    const x = (ev?.clientX ?? (rect.left + rect.width/2)) - rect.left;
+    const y = (ev?.clientY ?? (rect.top + rect.height/2)) - rect.top;
+    const s = Math.max(rect.width, rect.height) * 0.8;
 
-  // --- PWA install
+    const rp = document.createElement("span");
+    rp.className = "rp";
+    rp.style.width = rp.style.height = `${s}px`;
+    rp.style.left = `${x - s/2}px`;
+    rp.style.top = `${y - s/2}px`;
+
+    btn.appendChild(rp);
+    setTimeout(() => rp.remove(), 750);
+  };
+  document.addEventListener("pointerdown", (e) => {
+    const btn = e.target?.closest?.(".btn.ripple, .x.ripple, .lbX.ripple, .lbNav.ripple");
+    if (btn) addRipple(btn, e);
+  }, { passive:true });
+
+  // Modal (Pay)
+  const modal = $("#payModal");
+  const openPay = () => { modal?.classList.add("show"); modal?.setAttribute("aria-hidden","false"); };
+  const closePay = () => { modal?.classList.remove("show"); modal?.setAttribute("aria-hidden","true"); };
+
+  // PWA install
   let deferredPrompt = null;
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
@@ -257,146 +241,84 @@
   });
 
   const installApp = async () => {
-    if(!deferredPrompt){
-      toast("Chrome → Menü → App installieren");
-      return;
-    }
+    if(!deferredPrompt){ toast("Chrome → Menü → App installieren"); return; }
     deferredPrompt.prompt();
     await deferredPrompt.userChoice.catch(()=>{});
     deferredPrompt = null;
   };
 
-  // --- Reveal on scroll (fast)
-  const revealInit = () => {
-    const els = $$(".reveal");
-    if(!("IntersectionObserver" in window)){
-      els.forEach(e=>e.classList.add("show"));
-      return;
-    }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(en => {
-        if(en.isIntersecting){
-          en.target.classList.add("show");
-          io.unobserve(en.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    els.forEach(e=> io.observe(e));
-  };
-
-  // --- Premium gallery lightbox
-  const lbModal = $("#lbModal");
+  // Lightbox
+  const lb = $("#lightbox");
   const lbImg = $("#lbImg");
-  const lbTitle = $("#lbTitle");
-  const lbPrev = $("#lbPrev");
-  const lbNext = $("#lbNext");
-  const galleryItems = $$("#galleryGrid .gItem");
+  const lbCap = $("#lbCap");
+  const imgs = $$("#galleryGrid img");
+  let idx = -1;
 
-  let lbIndex = -1;
+  const lbOpen = (i) => {
+    if (!lb || !lbImg) return;
+    idx = i;
+    const img = imgs[idx];
+    const full = img?.dataset?.full || img?.src;
+    const cap = img?.dataset?.cap || img?.alt || "";
+    lbImg.src = full;
+    lbImg.alt = img?.alt || "";
+    if (lbCap) lbCap.textContent = cap;
 
-  const openLB = (idx) => {
-    if(!galleryItems.length) return;
-    lbIndex = Math.max(0, Math.min(idx, galleryItems.length - 1));
-
-    const it = galleryItems[lbIndex];
-    const src = it.getAttribute("data-src");
-    const alt = it.getAttribute("data-alt") || "Photo";
-    const cap = it.querySelector(".gCap")?.textContent?.trim() || "CamperBox";
-
-    lbImg.src = src;
-    lbImg.alt = alt;
-    lbTitle.textContent = cap;
-
-    lbModal.classList.add("show");
-    lbModal.setAttribute("aria-hidden","false");
-
-    // prefetch neighbors (fast)
-    [lbIndex-1, lbIndex+1].forEach((n) => {
-      if(n>=0 && n<galleryItems.length){
-        const s = galleryItems[n].getAttribute("data-src");
-        const img = new Image();
-        img.src = s;
-      }
-    });
+    lb.classList.add("show");
+    lb.setAttribute("aria-hidden","false");
+    document.body.style.overflow = "hidden";
+  };
+  const lbClose = () => {
+    if (!lb) return;
+    lb.classList.remove("show");
+    lb.setAttribute("aria-hidden","true");
+    document.body.style.overflow = "";
+    if (lbImg) lbImg.src = "";
+    idx = -1;
+  };
+  const lbNext = () => {
+    if (imgs.length < 2) return;
+    const n = (idx + 1) % imgs.length;
+    lbOpen(n);
+  };
+  const lbPrev = () => {
+    if (imgs.length < 2) return;
+    const n = (idx - 1 + imgs.length) % imgs.length;
+    lbOpen(n);
   };
 
-  const closeLB = () => {
-    lbModal.classList.remove("show");
-    lbModal.setAttribute("aria-hidden","true");
-    // keep src to allow quick re-open; no need to blank
-  };
+  // Bind gallery clicks
+  imgs.forEach((img, i) => {
+    img.style.cursor = "zoom-in";
+    img.addEventListener("click", () => lbOpen(i));
+  });
 
-  const stepLB = (dir) => {
-    if(lbIndex < 0) return;
-    let n = lbIndex + dir;
-    if(n < 0) n = galleryItems.length - 1;
-    if(n >= galleryItems.length) n = 0;
-    openLB(n);
-  };
+  // Lightbox controls
+  lb?.addEventListener("click", (e) => {
+    const t = e.target;
+    if (t?.matches?.("[data-lb-close]") || t?.closest?.("[data-lb-close]")) lbClose();
+    if (t?.matches?.("[data-lb-next]") || t?.closest?.("[data-lb-next]")) lbNext();
+    if (t?.matches?.("[data-lb-prev]") || t?.closest?.("[data-lb-prev]")) lbPrev();
+  });
 
-  const lightboxInit = () => {
-    galleryItems.forEach((it, idx) => {
-      it.addEventListener("click", () => openLB(idx));
-      it.setAttribute("role","button");
-      it.setAttribute("tabindex","0");
-      it.addEventListener("keydown", (e) => {
-        if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openLB(idx); }
-      });
-    });
+  document.addEventListener("keydown", (e) => {
+    if (!lb?.classList.contains("show")) return;
+    if (e.key === "Escape") lbClose();
+    if (e.key === "ArrowRight") lbNext();
+    if (e.key === "ArrowLeft") lbPrev();
+  });
 
-    lbPrev?.addEventListener("click", () => stepLB(-1));
-    lbNext?.addEventListener("click", () => stepLB(+1));
-
-    lbModal?.addEventListener("click", (e) => {
-      const t = e.target;
-      if (t && (t.matches("[data-close]") || t.closest("[data-close]"))) closeLB();
-    });
-
-    // Keyboard
-    document.addEventListener("keydown", (e) => {
-      if(lbModal?.classList.contains("show")){
-        if(e.key === "Escape") closeLB();
-        if(e.key === "ArrowLeft") stepLB(-1);
-        if(e.key === "ArrowRight") stepLB(+1);
-      } else if(payModal?.classList.contains("show")){
-        if(e.key === "Escape") closePay();
-      }
-    });
-
-    // Swipe (mobile)
-    let sx=0, sy=0;
-    lbModal?.addEventListener("touchstart", (e) => {
-      const t = e.touches?.[0];
-      if(!t) return;
-      sx = t.clientX; sy = t.clientY;
-    }, { passive:true });
-
-    lbModal?.addEventListener("touchend", (e) => {
-      const t = e.changedTouches?.[0];
-      if(!t) return;
-      const dx = t.clientX - sx;
-      const dy = t.clientY - sy;
-      if(Math.abs(dx) > 45 && Math.abs(dy) < 40){
-        stepLB(dx > 0 ? -1 : +1);
-      }
-    }, { passive:true });
-  };
-
-  // Init
-  setLang(lang());
-  $("#y").textContent = String(new Date().getFullYear());
-
-  enablePremiumButtons();
-  revealInit();
-  lightboxInit();
+  // Init lang + year
+  const saved = localStorage.getItem("k2_lang") || "de";
+  setLang(saved);
+  $("#y") && ($("#y").textContent = String(new Date().getFullYear()));
 
   // Events
   $("#btnRequest")?.addEventListener("click", () => openTelegram(buildMessage(null)));
   $("#btnSend")?.addEventListener("click", () => openTelegram(buildMessage(null)));
-
   $("#btnCopy")?.addEventListener("click", async () => {
     const text = buildMessage(null);
-    try { await navigator.clipboard.writeText(text); toast(i18n[lang()].toast_copied || "Copied"); }
+    try { await navigator.clipboard.writeText(text); toast(i18n[localStorage.getItem("k2_lang")||"de"].toast_copied); }
     catch { toast("Copy failed"); }
   });
 
@@ -411,19 +333,19 @@
   $("#btnPay2")?.addEventListener("click", openPay);
   $("#mobPay")?.addEventListener("click", openPay);
 
-  payModal?.addEventListener("click", (e) => {
+  modal?.addEventListener("click", (e) => {
     const t = e.target;
     if (t && (t.matches("[data-close]") || t.closest("[data-close]"))) closePay();
   });
+  document.addEventListener("keydown", (e) => { if(e.key==="Escape" && modal?.classList.contains("show")) closePay(); });
 
   $("#btnInstall")?.addEventListener("click", installApp);
+
   $$(".chip").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
   // Service Worker
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(()=>{});
-    });
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(()=>{}));
   }
 })();
 
@@ -440,7 +362,7 @@
     if(!t){
       t = document.createElement("div");
       t.id = "toast";
-      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(36,48,95,.8);background:rgba(11,18,48,.92);backdrop-filter: blur(10px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease";
+      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:12px;border:1px solid rgba(36,48,95,.8);background:rgba(11,18,48,.92);backdrop-filter: blur(10px);font-weight:900;z-index:220;opacity:0;transition:opacity .15s ease";
       document.body.appendChild(t);
     }
     t.textContent = msg;
@@ -465,10 +387,12 @@
     return lines.join("\n");
   };
 
-  if(sendTg && form){
-    sendTg.addEventListener("click", async () => {
-      try { await navigator.clipboard.writeText(buildMsgFromForm()); } catch(_){}
-      window.open("https://t.me/k2camperbox","_blank","noopener");
+  if(sendTg){
+    sendTg.addEventListener("click", () => {
+      try{
+        navigator.clipboard?.writeText(buildMsgFromForm()).catch(()=>{});
+        window.open("https://t.me/k2camperbox","_blank","noopener");
+      }catch(e){}
     });
   }
 
@@ -494,7 +418,7 @@
       } else {
         toast("Ошибка отправки");
       }
-    }catch(_){
+    }catch(err){
       toast("Ошибка сети/скрипта");
     } finally {
       btn && (btn.disabled = false);
