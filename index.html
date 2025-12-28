@@ -1,73 +1,477 @@
 <!doctype html>
 <html lang="de">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>K2 CamperBox — Premium Camper Module</title>
-  <meta name="theme-color" content="#0a0f22"/>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>K2 CamperBox — Camper-Modul für Hochdachkombis | Anfrage & Bestellung</title>
+  <meta name="description" content="K2 CamperBox: Modulares Camper-System (Caddy/Berlingo/Combo/…): Anfrage via Telegram + Zahlung per Revolut QR." />
+  <meta name="theme-color" content="#0a0f22" />
+  <meta name="color-scheme" content="dark" />
 
-  <link rel="manifest" href="/manifest.json"/>
-  <link rel="icon" href="/icons/icon-192.png"/>
+  <!-- PWA -->
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="/icons/icon-192.png" />
 
-  <link rel="preconnect" href="https://fonts.googleapis.com"/>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet"/>
+  <!-- Fonts (без preload-woff ошибок) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="/styles.css"/>
+  <link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
+  <div class="bg" aria-hidden="true">
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+    <div class="glow g3"></div>
+    <div class="noise"></div>
+  </div>
 
-<header class="topbar">
-  <div class="brand">
-    <img src="/assets/logo.png" class="logo"/>
-    <div>
-      <div class="brandName">CamperBox</div>
-      <div class="brandTag">Smart • Modular • Ready</div>
+  <header class="topbar">
+    <a class="brand" href="#top" aria-label="K2 CamperBox">
+      <span class="logoImg">
+        <img src="/assets/logo.png" alt="K2" width="42" height="42" loading="eager" decoding="async"/>
+      </span>
+      <span class="brandtext">
+        <span class="name">CamperBox</span>
+        <span class="tag">Smart • Modular • Ready</span>
+      </span>
+    </a>
+
+    <nav class="nav">
+      <a href="#models" data-i18n="nav_models">Modelle</a>
+      <a href="#packages" data-i18n="nav_packages">Pakete</a>
+      <a href="#gallery" data-i18n="nav_gallery">Galerie</a>
+      <a href="#faq" data-i18n="nav_faq">FAQ</a>
+      <a href="/configurator.html" data-i18n="nav_cfg">Konfigurator</a>
+      <a href="/cabinet.html" data-i18n="nav_cab">Cabinet</a>
+      <a href="#contact" class="btn btnSm btnOutline" data-i18n="nav_contact">Kontakt</a>
+    </nav>
+
+    <div class="lang">
+      <button class="chip active" data-lang="de" aria-pressed="true">DE</button>
+      <button class="chip" data-lang="ua" aria-pressed="false">UA</button>
+      <button class="chip" data-lang="ru" aria-pressed="false">RU</button>
+    </div>
+  </header>
+
+  <main id="top" class="wrap">
+    <section class="hero">
+      <div class="heroLeft reveal">
+        <div class="badge" data-i18n="hero_badge">🇩🇪 Kassel • Deutschland • Lieferung/Einbau</div>
+
+        <h1 data-i18n="hero_title">K2 CamperBox — dein Auto in 5 Minuten zum Camper</h1>
+
+        <p class="lead" data-i18n="hero_lead">
+          Modulares Camping-System für Hochdachkombis (Caddy / Berlingo / Combo / Doblo / Tourneo / …).
+          Schnell anfragen in Telegram + bequeme Bezahlung über Revolut QR.
+        </p>
+
+        <div class="ctaRow">
+          <button class="btn btnTg premium" id="btnRequest" data-i18n="cta_request">
+            <span class="btnIcon" aria-hidden="true">
+              <!-- Telegram -->
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M21.6 4.6c.3-1.2-.9-2.2-2-1.7L3.7 9.2c-1.2.5-1.1 2.2.2 2.5l4.4 1.2 1.6 5.1c.3 1 1.6 1.3 2.3.5l2.5-2.8 4.8 3.5c.9.6 2.1.1 2.3-1l2.2-13.6Z" fill="currentColor" opacity=".95"/>
+                <path d="M8.5 12.8 18.6 6.7c.2-.1.4.2.2.4l-8.3 7.5c-.3.3-.5.7-.4 1.2l.6 3.2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="btnText" data-i18n="cta_request">Anfrage in Telegram</span>
+          </button>
+
+          <button class="btn btnPay premium" id="btnPay" data-i18n="cta_pay">
+            <span class="btnIcon" aria-hidden="true">
+              <!-- Card -->
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M3.5 7.5A3 3 0 0 1 6.5 4.5h11A3 3 0 0 1 20.5 7.5v9a3 3 0 0 1-3 3h-11a3 3 0 0 1-3-3v-9Z" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M3.7 9.2h16.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".9"/>
+                <path d="M7 15.8h4.6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="btnText" data-i18n="cta_pay">Revolut QR bezahlen</span>
+          </button>
+
+          <button class="btn btnInstall premium" id="btnInstall" data-i18n="cta_install">
+            <span class="btnIcon" aria-hidden="true">
+              <!-- Install -->
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M12 3v10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                <path d="M8.5 10.5 12 13.9l3.5-3.4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 16.5a2.5 2.5 0 0 0 2.5 2.5h9A2.5 2.5 0 0 0 19 16.5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+              </svg>
+            </span>
+            <span class="btnText" data-i18n="cta_install">App installieren</span>
+          </button>
+        </div>
+
+        <div class="mini">
+          <div class="miniItem liveCard">
+            <div class="miniK" data-i18n="mini_1_k">Schnell</div>
+            <div class="miniV" data-i18n="mini_1_v">Aufbau 5–10 Min</div>
+          </div>
+          <div class="miniItem liveCard">
+            <div class="miniK" data-i18n="mini_2_k">Modular</div>
+            <div class="miniV" data-i18n="mini_2_v">Boxen / Bett / Küche</div>
+          </div>
+          <div class="miniItem liveCard">
+            <div class="miniK" data-i18n="mini_3_k">Praktisch</div>
+            <div class="miniV" data-i18n="mini_3_v">Für Alltag & Reise</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="heroRight reveal">
+        <div class="card heroCard liveCard">
+          <div class="cardTop">
+            <div class="cardTitle" data-i18n="hero_card_title">Sofort-Angebot</div>
+            <div class="pill" data-i18n="hero_card_pill">Heute antworten</div>
+          </div>
+          <div class="cardBody">
+            <div class="row">
+              <div class="label" data-i18n="hero_card_model">Auto/Modell</div>
+              <input id="carModel" class="input" placeholder="z.B. VW Caddy Maxi" />
+            </div>
+            <div class="row">
+              <div class="label" data-i18n="hero_card_wishes">Wünsche</div>
+              <textarea id="wishes" class="input area" placeholder="Bett, Küche, Stauraum, Budget…"></textarea>
+            </div>
+            <div class="row2">
+              <button class="btn btnTg premium full" id="btnSend" data-i18n="hero_card_send">
+                <span class="btnIcon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M21.6 4.6c.3-1.2-.9-2.2-2-1.7L3.7 9.2c-1.2.5-1.1 2.2.2 2.5l4.4 1.2 1.6 5.1c.3 1 1.6 1.3 2.3.5l2.5-2.8 4.8 3.5c.9.6 2.1.1 2.3-1l2.2-13.6Z" fill="currentColor" opacity=".95"/>
+                  </svg>
+                </span>
+                <span class="btnText" data-i18n="hero_card_send">In Telegram senden</span>
+              </button>
+              <button class="btn btnOutline premium full" id="btnCopy" data-i18n="hero_card_copy">
+                <span class="btnIcon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none">
+                    <path d="M9 9.5h9a2.5 2.5 0 0 1 2.5 2.5v7A2.5 2.5 0 0 1 18 21.5H9A2.5 2.5 0 0 1 6.5 19v-7A2.5 2.5 0 0 1 9 9.5Z" stroke="currentColor" stroke-width="1.6"/>
+                    <path d="M7.5 14.5H6A2.5 2.5 0 0 1 3.5 12V5A2.5 2.5 0 0 1 6 2.5h9A2.5 2.5 0 0 1 17.5 5v1.5" stroke="currentColor" stroke-width="1.6" opacity=".8"/>
+                  </svg>
+                </span>
+                <span class="btnText" data-i18n="hero_card_copy">Text kopieren</span>
+              </button>
+            </div>
+            <div class="hint" data-i18n="hero_card_hint">
+              Tipp: Wenn Telegram nicht öffnet — kopiere den Text und sende ihn an @k2camperbox.
+            </div>
+          </div>
+        </div>
+
+        <div class="card stats liveCard">
+          <div class="stat">
+            <div class="statNum">DE/UA/RU</div>
+            <div class="statLab" data-i18n="stat_1">3 Sprachen</div>
+          </div>
+          <div class="stat">
+            <div class="statNum">PWA</div>
+            <div class="statLab" data-i18n="stat_2">als App installierbar</div>
+          </div>
+          <div class="stat">
+            <div class="statNum">QR</div>
+            <div class="statLab" data-i18n="stat_3">Revolut Bezahlung</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="models" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="models_title">Für welche Autos?</h2>
+        <p class="muted" data-i18n="models_sub">Hochdachkombis & kompakte Vans — wir passen das Modul an.</p>
+      </div>
+
+      <div class="grid3">
+        <div class="tile liveCard">
+          <div class="tileIcon">🚐</div>
+          <div class="tileTitle">VW Caddy</div>
+          <div class="tileText" data-i18n="models_1">Caddy / Caddy Maxi — Alltag + Reise.</div>
+        </div>
+        <div class="tile liveCard">
+          <div class="tileIcon">🧩</div>
+          <div class="tileTitle">PSA</div>
+          <div class="tileText" data-i18n="models_2">Berlingo / Rifter / Partner — modulare Boxen.</div>
+        </div>
+        <div class="tile liveCard">
+          <div class="tileIcon">🛠️</div>
+          <div class="tileTitle">Weitere</div>
+          <div class="tileText" data-i18n="models_3">Combo / Doblo / Tourneo / Kangoo / …</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="packages" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="packages_title">Pakete</h2>
+        <p class="muted" data-i18n="packages_sub">Beispiele. Endpreis hängt vom Auto und den Optionen ab.</p>
+      </div>
+
+      <div class="grid3">
+        <div class="priceCard liveCard">
+          <div class="pcTop">
+            <div class="pcName" data-i18n="pkg_1_name">Start</div>
+            <div class="pcPrice">€ —</div>
+          </div>
+          <ul class="pcList">
+            <li data-i18n="pkg_1_a">Bettplatte + Grund-Boxen</li>
+            <li data-i18n="pkg_1_b">Schneller Ein-/Ausbau</li>
+            <li data-i18n="pkg_1_c">Leicht & stabil</li>
+          </ul>
+          <button class="btn btnOutline premium full" data-pkg="Start" data-i18n="pkg_btn">Anfragen</button>
+        </div>
+
+        <div class="priceCard featured liveCard">
+          <div class="pcTop">
+            <div class="pcName" data-i18n="pkg_2_name">Comfort</div>
+            <div class="pcPrice">€€ —</div>
+          </div>
+          <ul class="pcList">
+            <li data-i18n="pkg_2_a">Mehr Stauraum + Orga</li>
+            <li data-i18n="pkg_2_b">Matratze / Polster-Set</li>
+            <li data-i18n="pkg_2_c">Option: Auszug-Tisch</li>
+          </ul>
+          <button class="btn btnTg premium full" data-pkg="Comfort" data-i18n="pkg_btn">Anfragen</button>
+        </div>
+
+        <div class="priceCard liveCard">
+          <div class="pcTop">
+            <div class="pcName" data-i18n="pkg_3_name">Pro</div>
+            <div class="pcPrice">€€€ —</div>
+          </div>
+          <ul class="pcList">
+            <li data-i18n="pkg_3_a">Küchen-Modul + Wasser</li>
+            <li data-i18n="pkg_3_b">12V / Power-Optionen</li>
+            <li data-i18n="pkg_3_c">Individuelle Anpassung</li>
+          </ul>
+          <button class="btn btnOutline premium full" data-pkg="Pro" data-i18n="pkg_btn">Anfragen</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM GALLERY -->
+    <section id="gallery" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="gallery_premium_title">Reale Beispiele CamperBox</h2>
+        <p class="muted" data-i18n="gallery_premium_sub">Tippe auf ein Foto — öffnet sich красивый Lightbox.</p>
+      </div>
+
+      <div class="galleryGrid" id="galleryGrid" aria-label="Gallery">
+        <!-- реальные фото: положи файлы в /assets/ -->
+        <figure class="gItem liveCard" data-src="/assets/gallery-1.jpg" data-alt="K2 CamperBox — фото 1">
+          <img src="/assets/gallery-1.jpg" alt="K2 CamperBox — фото 1" loading="lazy" decoding="async">
+          <figcaption class="gCap">CamperBox — Setup 01</figcaption>
+        </figure>
+        <figure class="gItem liveCard" data-src="/assets/gallery-2.jpg" data-alt="K2 CamperBox — фото 2">
+          <img src="/assets/gallery-2.jpg" alt="K2 CamperBox — фото 2" loading="lazy" decoding="async">
+          <figcaption class="gCap">CamperBox — Setup 02</figcaption>
+        </figure>
+        <figure class="gItem liveCard" data-src="/assets/gallery-3.jpg" data-alt="K2 CamperBox — фото 3">
+          <img src="/assets/gallery-3.jpg" alt="K2 CamperBox — фото 3" loading="lazy" decoding="async">
+          <figcaption class="gCap">CamperBox — Setup 03</figcaption>
+        </figure>
+        <figure class="gItem liveCard" data-src="/assets/gallery-4.jpg" data-alt="K2 CamperBox — фото 4">
+          <img src="/assets/gallery-4.jpg" alt="K2 CamperBox — фото 4" loading="lazy" decoding="async">
+          <figcaption class="gCap">CamperBox — Setup 04</figcaption>
+        </figure>
+      </div>
+
+      <div class="note" data-i18n="gallery_note_premium">
+        Файлы: /assets/gallery-1.jpg … /assets/gallery-4.jpg. Можно заменить на свои без правок кода.
+      </div>
+    </section>
+
+    <section id="faq" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="faq_title">FAQ</h2>
+        <p class="muted" data-i18n="faq_sub">Kurz & ehrlich — для чайника.</p>
+      </div>
+
+      <div class="faq">
+        <details open class="liveCard">
+          <summary data-i18n="faq_q1">Wie schnell kann ich bestellen?</summary>
+          <div class="faqA" data-i18n="faq_a1">Schreib in Telegram, wir klären Auto + Optionen. Danach bekommst du Preis & срок.</div>
+        </details>
+        <details class="liveCard">
+          <summary data-i18n="faq_q2">Kann ich mit Revolut bezahlen?</summary>
+          <div class="faqA" data-i18n="faq_a2">Ja. Нажми «Revolut QR bezahlen» — откроется окно с QR-кодом. Сканируешь в Revolut и оплачиваешь.</div>
+        </details>
+        <details class="liveCard">
+          <summary data-i18n="faq_q3">App installieren?</summary>
+          <div class="faqA" data-i18n="faq_a3">Да. Открой сайт в Chrome → «Установить приложение». Или нажми кнопку «App installieren».</div>
+        </details>
+      </div>
+    </section>
+
+    <section id="request" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="form_title">Anfrage-Formular</h2>
+        <p class="muted" data-i18n="form_sub">Отправка заявки в Google Sheets (через Apps Script).</p>
+      </div>
+
+      <div class="card liveCard" style="padding:14px">
+        <form id="leadForm" class="form">
+          <div class="formGrid">
+            <div class="row">
+              <div class="label" data-i18n="f_name">Name</div>
+              <input class="input" name="name" required placeholder="Max" />
+            </div>
+            <div class="row">
+              <div class="label" data-i18n="f_phone">Telefon</div>
+              <input class="input" name="phone" required placeholder="+49 ..." />
+            </div>
+            <div class="row">
+              <div class="label" data-i18n="f_email">Email</div>
+              <input class="input" name="email" type="email" placeholder="you@mail.com" />
+            </div>
+            <div class="row">
+              <div class="label" data-i18n="f_car">Auto/Modell</div>
+              <input class="input" name="carModel" placeholder="VW Caddy Maxi" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <div class="label" data-i18n="f_msg">Nachricht</div>
+            <textarea class="input area" name="message" placeholder="Bett/Küche/Budget/..." required></textarea>
+          </div>
+
+          <div class="ctaRow" style="margin-top:10px">
+            <button class="btn btnInstall premium" type="submit" id="btnSubmitLead" data-i18n="f_send">
+              <span class="btnIcon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M7 7.5h10M7 12h10M7 16.5h6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                </svg>
+              </span>
+              <span class="btnText" data-i18n="f_send">In Sheets senden</span>
+            </button>
+            <a class="btn btnOutline premium" href="/crm.html" data-i18n="f_open_crm">
+              <span class="btnText" data-i18n="f_open_crm">Mini-CRM öffnen</span>
+            </a>
+            <button class="btn btnTg premium" type="button" id="btnSendTg2" data-i18n="f_send_tg">
+              <span class="btnIcon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none">
+                  <path d="M21.6 4.6c.3-1.2-.9-2.2-2-1.7L3.7 9.2c-1.2.5-1.1 2.2.2 2.5l4.4 1.2 1.6 5.1c.3 1 1.6 1.3 2.3.5l2.5-2.8 4.8 3.5c.9.6 2.1.1 2.3-1l2.2-13.6Z" fill="currentColor" opacity=".95"/>
+                </svg>
+              </span>
+              <span class="btnText" data-i18n="f_send_tg">Oder in Telegram senden</span>
+            </button>
+          </div>
+
+          <div class="hint" data-i18n="f_hint">
+            Чтобы форма работала: вставь Apps Script URL в crm-config.js. Если не настроено — используй Telegram.
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <section id="contact" class="section reveal">
+      <div class="sectionHead">
+        <h2 data-i18n="contact_title">Kontakt</h2>
+        <p class="muted" data-i18n="contact_sub">Alles кликабельно: Telegram • Telefon • Email • Zahlung.</p>
+      </div>
+
+      <div class="contactGrid">
+        <a class="contactCard liveCard" href="https://t.me/k2camperbox" target="_blank" rel="noopener">
+          <div class="ccIcon">✈️</div>
+          <div>
+            <div class="ccTitle">Telegram</div>
+            <div class="ccText">@k2camperbox</div>
+          </div>
+        </a>
+
+        <a class="contactCard liveCard" href="tel:+4916096527272">
+          <div class="ccIcon">📞</div>
+          <div>
+            <div class="ccTitle" data-i18n="contact_phone">Telefon</div>
+            <div class="ccText">+49 160 96527272</div>
+          </div>
+        </a>
+
+        <a class="contactCard liveCard" href="mailto:k2camperbox@gmail.com?subject=K2%20CamperBox%20Anfrage">
+          <div class="ccIcon">✉️</div>
+          <div>
+            <div class="ccTitle">Email</div>
+            <div class="ccText">k2camperbox@gmail.com</div>
+          </div>
+        </a>
+
+        <button class="contactCard pay liveCard" id="btnPay2" type="button">
+          <div class="ccIcon">💳</div>
+          <div>
+            <div class="ccTitle" data-i18n="contact_pay">Bezahlen</div>
+            <div class="ccText" data-i18n="contact_pay_sub">Revolut QR</div>
+          </div>
+        </button>
+      </div>
+
+      <footer class="footer">
+        <div class="footLeft">© <span id="y"></span> K2 CamperBox • Kassel</div>
+        <div class="footRight">
+          <a href="/impressum.html">Impressum</a> · <a href="/datenschutz.html">Datenschutz</a> · <a href="/agb.html">AGB</a> ·
+          <a href="#top" data-i18n="footer_top">Nach oben</a>
+        </div>
+      </footer>
+    </section>
+
+    <div class="mobileBar">
+      <a class="btn btnTg premium" href="#request" data-i18n="mob_request">Заявка</a>
+      <button class="btn btnPay premium" id="mobPay" data-i18n="mob_pay">QR</button>
+      <a class="btn btnOutline premium" href="/configurator.html" data-i18n="mob_cfg">LEGO</a>
+      <a class="btn btnOutline premium" href="/cabinet.html" data-i18n="mob_cab">Cabinet</a>
+    </div>
+  </main>
+
+  <!-- Pay Modal -->
+  <div class="modal" id="payModal" aria-hidden="true">
+    <div class="modalBack" data-close></div>
+    <div class="modalCard" role="dialog" aria-modal="true" aria-labelledby="payTitle">
+      <div class="modalTop">
+        <div class="modalTitle" id="payTitle" data-i18n="pay_title">Revolut QR bezahlen</div>
+        <button class="x" data-close aria-label="Close">✕</button>
+      </div>
+
+      <div class="modalBody">
+        <div class="qrWrap">
+          <img src="/assets/revolut-qr.png" alt="Revolut QR" class="qr" loading="lazy" decoding="async" />
+          <div class="qrHint" data-i18n="pay_hint">Открой Revolut → Scan → наведи на QR → оплати.</div>
+        </div>
+
+        <div class="payInfo">
+          <div class="piRow"><span data-i18n="pay_to">Empfänger:</span> <b>@k2camperbox</b></div>
+          <div class="piRow"><span data-i18n="pay_note">Комментарий:</span> <b>K2 CamperBox</b></div>
+          <div class="piRow small" data-i18n="pay_replace">
+            Важно: это демо QR. Замени файл /assets/revolut-qr.png на твой реальный QR из Revolut.
+          </div>
+        </div>
+
+        <div class="modalActions">
+          <a class="btn btnOutline premium full" href="/assets/revolut-qr.png" download data-i18n="pay_download">Скачать QR</a>
+          <button class="btn btnPay premium full" data-close data-i18n="pay_close">Закрыть</button>
+        </div>
+      </div>
     </div>
   </div>
-</header>
 
-<main class="wrap">
+  <!-- Lightbox Modal -->
+  <div class="modal lb" id="lbModal" aria-hidden="true">
+    <div class="modalBack" data-close></div>
+    <div class="lbCard" role="dialog" aria-modal="true" aria-label="Gallery viewer">
+      <button class="lbX" data-close aria-label="Close">✕</button>
+      <button class="lbNav prev" id="lbPrev" aria-label="Previous">‹</button>
+      <button class="lbNav next" id="lbNext" aria-label="Next">›</button>
 
-<!-- HERO -->
-<section class="hero">
-  <span class="badge">🇩🇪 Kassel • Deutschland • Lieferung/Einbau</span>
-  <h1>K2 CamperBox — превращаем авто в кемпер за 5 минут</h1>
-  <p class="lead">
-    Модульная система для Caddy / Berlingo / Combo / Doblo / Tourneo.
-    Быстрая заявка в Telegram + оплата через Revolut QR.
-  </p>
-
-  <div class="ctaRow">
-    <button class="btn primary ripple">🚀 Заявка в Telegram</button>
-    <button class="btn pay ripple">💳 Revolut QR</button>
-    <button class="btn install ripple">⬇️ Установить приложение</button>
+      <div class="lbMedia">
+        <img id="lbImg" alt="" />
+      </div>
+      <div class="lbMeta">
+        <div class="lbTitle" id="lbTitle">CamperBox</div>
+        <div class="lbHint" id="lbHint">Esc — close • ←/→ — navigate</div>
+      </div>
+    </div>
   </div>
-</section>
 
-<!-- PREMIUM GALLERY -->
-<section class="section">
-  <h2>Реальные примеры CamperBox</h2>
-  <p class="muted">Нажми на фото для увеличения</p>
-
-  <div class="galleryPremium">
-    <img src="/assets/gallery-1.jpg" alt="" />
-    <img src="/assets/gallery-2.jpg" alt="" />
-    <img src="/assets/gallery-3.jpg" alt="" />
-    <img src="/assets/gallery-4.jpg" alt="" />
-    <img src="/assets/gallery-5.jpg" alt="" />
-    <img src="/assets/gallery-6.jpg" alt="" />
-  </div>
-</section>
-
-</main>
-
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-  <span class="lightboxClose">✕</span>
-  <img id="lightboxImg"/>
-</div>
-
-<script src="/app.js"></script>
+  <script defer src="/app.js"></script>
 </body>
 </html>
