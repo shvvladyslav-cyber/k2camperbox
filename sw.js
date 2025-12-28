@@ -1,45 +1,52 @@
-/* sw.js — PWA cache (ultra-safe, no-crash install) */
+/* sw.js — PWA cache (robust offline, won't fail on missing files) */
 'use strict';
 
-const VERSION = 'v1.0.6';
+const VERSION = 'v1.0.8';
 const CACHE_NAME = `k2camperbox-${VERSION}`;
 
-// Кэшируем ТОЛЬКО то, что точно нужно и обычно существует.
-// Важно: если чего-то нет (404) — SW НЕ сломается.
-const CORE = [
+/**
+ * IMPORTANT:
+ * Add here ONLY what реально существует на сервере.
+ * Если файла нет — всё равно не упадёт (мы кешируем по одному).
+ */
+const ASSETS = [
   '/',
   '/index.html',
   '/styles.css',
   '/app.js',
   '/manifest.json',
+
+  '/favicon.ico',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
-  // favicon часто бывает 404 — поэтому НЕ кладём в CORE
-  // '/favicon.ico',
+
+  '/assets/logo.png',
+  '/assets/revolut-qr.png',
+
+  '/assets/gallery-1.jpg',
+  '/assets/gallery-2.jpg',
+  '/assets/gallery-3.jpg',
+  '/assets/gallery-4.jpg',
+  '/assets/gallery-5.jpg',
+  '/assets/gallery-6.jpg',
 ];
 
-const isCacheableRequest = (req) => {
-  try {
-    const url = new URL(req.url);
-    if (req.method !== 'GET') return false;
-    if (url.protocol !== 'http:' && url.protocol !== 'https:') return false;
-    if (url.origin !== self.location.origin) return false;
-    // не кэшируем всякие data:, blob: и т.п.
-    return true;
-  } catch {
-    return false;
+async function cacheIndividually(cache, urls){
+  for(const url of urls){
+    try{
+      const req = new Request(url, { cache: 'reload' });
+      const res = await fetch(req);
+      if(res && res.ok) await cache.put(url, res.clone());
+    }catch(e){
+      // ignore missing or offline during install
+    }
   }
-};
+}
 
 self.addEventListener('install', (event) => {
   event.waitUntil((async () => {
     const cache = await caches.open(CACHE_NAME);
-    // addAll ломается, если 1 файл 404. Поэтому делаем безопасно:
-    const results = await Promise.allSettled(
-      CORE.map((path) => cache.add(new Request(path, { cache: 'reload' })))
-    );
-    // Никаких throw — установка всегда проходит
-    void results;
+    await cacheIndividually(cache, ASSETS);
     await self.skipWaiting();
   })());
 });
@@ -52,49 +59,45 @@ self.addEventListener('activate', (event) => {
   })());
 });
 
-// Network-first для навигации, Stale-while-revalidate для ассетов
+/**
+ * Strategy:
+ * - navigation: network-first -> cached /index.html fallback
+ * - static: cache-first -> network fallback
+ */
 self.addEventListener('fetch', (event) => {
   const req = event.request;
+  if (req.method !== 'GET') return;
 
-  if (!isCacheableRequest(req)) return;
-
-  // HTML навигации
+  // Navigation requests
   if (req.mode === 'navigate') {
     event.respondWith((async () => {
-      try {
-        const fresh = await fetch(req);
-        const copy = fresh.clone();
+      try{
+        const res = await fetch(req);
+        const copy = res.clone();
         const cache = await caches.open(CACHE_NAME);
         await cache.put('/index.html', copy);
-        return fresh;
-      } catch {
+        return res;
+      }catch(e){
         const cached = await caches.match('/index.html');
-        return cached || new Response('Offline', { status: 200, headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
+        return cached || new Response('Offline', { status: 200, headers: { 'Content-Type':'text/plain; charset=utf-8' }});
       }
     })());
     return;
   }
 
-  // Остальные ассеты: сначала кэш, параллельно обновляем
+  // Cache-first for assets
   event.respondWith((async () => {
-    const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(req);
-    const fetchPromise = fetch(req)
-      .then((res) => {
-        // кэшируем только успешные ответы
-        if (res && res.ok) cache.put(req, res.clone()).catch(() => {});
-        return res;
-      })
-      .catch(() => null);
+    const cached = await caches.match(req);
+    if (cached) return cached;
 
-    // если есть кэш — отдаём сразу (быстро), а в фоне обновляем
-    if (cached) {
-      fetchPromise.catch(() => {});
-      return cached;
+    try{
+      const res = await fetch(req);
+      const copy = res.clone();
+      const cache = await caches.open(CACHE_NAME);
+      await cache.put(req, copy);
+      return res;
+    }catch(e){
+      return cached || new Response('', { status: 504 });
     }
-
-    // иначе пробуем сеть, если сети нет — fallback (пустой)
-    const fresh = await fetchPromise;
-    return fresh || new Response('', { status: 504 });
   })());
 });
