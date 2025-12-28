@@ -3,6 +3,7 @@
    - Telegram request: opens chat + copies message
    - PWA install button
    - Revolut QR modal
+   - Premium reveal animations (subtle)
 */
 (() => {
   const $ = (s, root=document) => root.querySelector(s);
@@ -55,11 +56,21 @@
       toast_copied:"Kopiert ✅",
       form_title:"Anfrage-Formular",
       form_sub:"Sende Anfrage direkt in Google Sheets (Apps Script).",
-      f_name:"Name", f_phone:"Telefon", f_email:"Email", f_car:"Auto/Modell", f_msg:"Nachricht",
-      f_send:"In Sheets senden", f_open_crm:"Mini-CRM öffnen", f_send_tg:"Oder in Telegram senden",
+      f_name:"Name",
+      f_phone:"Telefon",
+      f_email:"Email",
+      f_car:"Auto/Modell",
+      f_msg:"Nachricht",
+      f_send:"In Sheets senden",
+      f_open_crm:"Mini-CRM öffnen",
+      f_send_tg:"Oder in Telegram senden",
       f_hint:"Damit das Formular funktioniert: Apps Script URL in crm-config.js eintragen. Sonst nutze Telegram.",
-      nav_cfg:"Konfigurator", nav_cab:"Cabinet",
-      mob_request:"Anfrage", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Cabinet",
+      nav_cfg:"Konfigurator",
+      nav_cab:"Cabinet",
+      mob_request:"Anfrage",
+      mob_pay:"QR",
+      mob_cfg:"LEGO",
+      mob_cab:"Cabinet",
     },
     ua: {
       nav_models:"Авто", nav_packages:"Пакети", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакти",
@@ -99,11 +110,21 @@
       toast_copied:"Скопійовано ✅",
       form_title:"Форма заявки",
       form_sub:"Надсилає заявку в Google Sheets (через Apps Script).",
-      f_name:"Імʼя", f_phone:"Телефон", f_email:"Email", f_car:"Авто/модель", f_msg:"Повідомлення",
-      f_send:"Надіслати в Sheets", f_open_crm:"Відкрити Mini-CRM", f_send_tg:"Або надіслати в Telegram",
+      f_name:"Імʼя",
+      f_phone:"Телефон",
+      f_email:"Email",
+      f_car:"Авто/модель",
+      f_msg:"Повідомлення",
+      f_send:"Надіслати в Sheets",
+      f_open_crm:"Відкрити Mini-CRM",
+      f_send_tg:"Або надіслати в Telegram",
       f_hint:"Щоб форма працювала: встав Apps Script URL у crm-config.js. Якщо не налаштовано — використовуй Telegram.",
-      nav_cfg:"Конфігуратор", nav_cab:"Кабінет",
-      mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабінет",
+      nav_cfg:"Конфігуратор",
+      nav_cab:"Кабінет",
+      mob_request:"Заявка",
+      mob_pay:"QR",
+      mob_cfg:"LEGO",
+      mob_cab:"Кабінет",
     },
     ru: {
       nav_models:"Авто", nav_packages:"Пакеты", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакты",
@@ -143,20 +164,30 @@
       toast_copied:"Скопировано ✅",
       form_title:"Форма заявки",
       form_sub:"Отправка заявки в Google Sheets (через Apps Script).",
-      f_name:"Имя", f_phone:"Телефон", f_email:"Email", f_car:"Авто/модель", f_msg:"Сообщение",
-      f_send:"Отправить в Sheets", f_open_crm:"Открыть Mini-CRM", f_send_tg:"Или отправить в Telegram",
+      f_name:"Имя",
+      f_phone:"Телефон",
+      f_email:"Email",
+      f_car:"Авто/модель",
+      f_msg:"Сообщение",
+      f_send:"Отправить в Sheets",
+      f_open_crm:"Открыть Mini-CRM",
+      f_send_tg:"Или отправить в Telegram",
       f_hint:"Чтобы форма работала: вставь Apps Script URL в crm-config.js. Если не настроено — используй Telegram.",
-      nav_cfg:"Конфигуратор", nav_cab:"Кабинет",
-      mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабинет",
+      nav_cfg:"Конфигуратор",
+      nav_cab:"Кабинет",
+      mob_request:"Заявка",
+      mob_pay:"QR",
+      mob_cfg:"LEGO",
+      mob_cab:"Кабинет",
     }
   };
 
   const toast = (msg) => {
-    let t = document.getElementById("toast");
+    let t = $("#toast");
     if(!t){
       t = document.createElement("div");
       t.id = "toast";
-      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(150,170,255,.18);background:rgba(6,10,22,.78);backdrop-filter: blur(14px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease;box-shadow:0 18px 60px rgba(0,0,0,.45);";
+      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(6,10,24,.75);backdrop-filter: blur(14px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease;color:rgba(233,238,255,.95);box-shadow:0 14px 40px rgba(0,0,0,.35)";
       document.body.appendChild(t);
     }
     t.textContent = msg;
@@ -165,11 +196,9 @@
     toast._tm = setTimeout(()=> t.style.opacity="0", 1400);
   };
 
-  const getLang = () => (localStorage.getItem("k2_lang") || "de");
-
   const buildMessage = (pkg) => {
-    const model = (document.getElementById("carModel")?.value || "").trim();
-    const wishes = (document.getElementById("wishes")?.value || "").trim();
+    const model = ($("#carModel")?.value || "").trim();
+    const wishes = ($("#wishes")?.value || "").trim();
     const lines = [
       `👋 ${cfg.projectName} Anfrage`,
       pkg ? `📦 Paket: ${pkg}` : null,
@@ -183,8 +212,8 @@
     return lines.join("\n");
   };
 
-  const openTelegram = async (text) => {
-    try{ await navigator.clipboard?.writeText(text); }catch(e){}
+  const openTelegram = (text) => {
+    navigator.clipboard?.writeText(text).catch(()=>{});
     window.open(cfg.telegram, "_blank", "noopener");
   };
 
@@ -206,40 +235,75 @@
     localStorage.setItem("k2_lang", lang);
   };
 
+  // Premium reveal (subtle)
+  const enableReveal = () => {
+    const prefersReduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const items = $$(".reveal");
+    if (!items.length) return;
+
+    if (prefersReduce) {
+      items.forEach(el => el.classList.add("in"));
+      return;
+    }
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) {
+          e.target.classList.add("in");
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    items.forEach(el => io.observe(el));
+  };
+
   // Modal
-  const modal = document.getElementById("payModal");
-  const openPay = () => { if(!modal) return; modal.classList.add("show"); modal.setAttribute("aria-hidden","false"); };
-  const closePay = () => { if(!modal) return; modal.classList.remove("show"); modal.setAttribute("aria-hidden","true"); };
+  const modal = $("#payModal");
+  const openPay = () => { modal?.classList.add("show"); modal?.setAttribute("aria-hidden","false"); };
+  const closePay = () => { modal?.classList.remove("show"); modal?.setAttribute("aria-hidden","true"); };
 
   // PWA install
   let deferredPrompt = null;
   window.addEventListener("beforeinstallprompt", (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    const b = document.getElementById("btnInstall");
-    if(b){ b.classList.remove("ghost"); b.classList.add("install"); }
+    // делаем кнопку install цветной (убираем "ghost")
+    $("#btnInstall")?.classList.remove("ghost");
   });
 
   const installApp = async () => {
-    if(!deferredPrompt){ toast("Chrome → Menü → App installieren"); return; }
+    if(!deferredPrompt){
+      toast("Chrome → Menü → App installieren");
+      return;
+    }
     deferredPrompt.prompt();
     await deferredPrompt.userChoice.catch(()=>{});
     deferredPrompt = null;
   };
 
   // Init
-  setLang(getLang());
-  const y = document.getElementById("y");
-  if(y) y.textContent = String(new Date().getFullYear());
+  const saved = localStorage.getItem("k2_lang") || "de";
+  setLang(saved);
+  enableReveal();
+
+  // Footer year
+  const y = $("#y");
+  if (y) y.textContent = String(new Date().getFullYear());
 
   // Events
-  document.getElementById("btnRequest")?.addEventListener("click", () => openTelegram(buildMessage(null)));
-  document.getElementById("btnSend")?.addEventListener("click", () => openTelegram(buildMessage(null)));
+  $("#btnRequest")?.addEventListener("click", () => openTelegram(buildMessage(null)));
+  $("#btnSend")?.addEventListener("click", () => openTelegram(buildMessage(null)));
 
-  document.getElementById("btnCopy")?.addEventListener("click", async () => {
+  $("#btnCopy")?.addEventListener("click", async () => {
     const text = buildMessage(null);
-    try { await navigator.clipboard.writeText(text); toast(i18n[getLang()].toast_copied || "Copied ✅"); }
-    catch { toast("Copy failed"); }
+    try {
+      await navigator.clipboard.writeText(text);
+      const lang = localStorage.getItem("k2_lang") || "de";
+      toast(i18n[lang]?.toast_copied || "Copied ✅");
+    } catch {
+      toast("Copy failed");
+    }
   });
 
   $$(".priceCard .btn").forEach(btn => {
@@ -249,9 +313,9 @@
     });
   });
 
-  document.getElementById("btnPay")?.addEventListener("click", openPay);
-  document.getElementById("btnPay2")?.addEventListener("click", openPay);
-  document.getElementById("mobPay")?.addEventListener("click", openPay);
+  $("#btnPay")?.addEventListener("click", openPay);
+  $("#btnPay2")?.addEventListener("click", openPay);
+  $("#mobPay")?.addEventListener("click", openPay);
 
   modal?.addEventListener("click", (e) => {
     const t = e.target;
@@ -262,17 +326,32 @@
     if(e.key==="Escape" && modal?.classList.contains("show")) closePay();
   });
 
-  document.getElementById("btnInstall")?.addEventListener("click", installApp);
+  $("#btnInstall")?.addEventListener("click", installApp);
   $$(".chip").forEach(b => b.addEventListener("click", () => setLang(b.dataset.lang)));
 
-  // Service Worker
+  // Service Worker (robust) + hot update
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(()=>{});
+    window.addEventListener("load", async () => {
+      try{
+        const reg = await navigator.serviceWorker.register("/sw.js");
+
+        // если есть waiting — обновим
+        if (reg.waiting) reg.waiting.postMessage("SKIP_WAITING");
+
+        reg.addEventListener("updatefound", () => {
+          const sw = reg.installing;
+          if (!sw) return;
+          sw.addEventListener("statechange", () => {
+            if (sw.state === "installed" && navigator.serviceWorker.controller) {
+              // новая версия поставилась — аккуратный намек
+              toast("Update ready ✅ Refresh");
+            }
+          });
+        });
+      }catch(e){}
     });
   }
 })();
-
 
 /* Lead form -> Apps Script (submitLead) */
 (() => {
@@ -287,7 +366,7 @@
     if(!t){
       t = document.createElement("div");
       t.id = "toast";
-      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(150,170,255,.18);background:rgba(6,10,22,.78);backdrop-filter: blur(14px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease;box-shadow:0 18px 60px rgba(0,0,0,.45);";
+      t.style.cssText = "position:fixed;left:50%;bottom:22px;transform:translateX(-50%);padding:10px 12px;border-radius:14px;border:1px solid rgba(255,255,255,.12);background:rgba(6,10,24,.75);backdrop-filter: blur(14px);font-weight:900;z-index:120;opacity:0;transition:opacity .15s ease;color:rgba(233,238,255,.95);box-shadow:0 14px 40px rgba(0,0,0,.35)";
       document.body.appendChild(t);
     }
     t.textContent = msg;
@@ -313,11 +392,11 @@
   };
 
   if(sendTg){
-    sendTg.addEventListener("click", async () => {
+    sendTg.addEventListener("click", () => {
       try{
-        await navigator.clipboard?.writeText(buildMsgFromForm());
+        navigator.clipboard?.writeText(buildMsgFromForm()).catch(()=>{});
+        window.open("https://t.me/k2camperbox","_blank","noopener");
       }catch(e){}
-      window.open("https://t.me/k2camperbox","_blank","noopener");
     });
   }
 
@@ -334,11 +413,10 @@
     fd.set("lang", lang());
     fd.set("source", location.href);
 
-    if(btn) btn.disabled = true;
-
+    btn && (btn.disabled = true);
     try{
       const res = await fetch(scriptUrl + "?action=submitLead", { method:"POST", body: fd });
-      const json = await res.json().catch(()=>null);
+      const json = await res.json();
       if(json && json.ok){
         toast("Заявка отправлена ✅");
         form.reset();
@@ -348,7 +426,7 @@
     }catch(err){
       toast("Ошибка сети/скрипта");
     } finally {
-      if(btn) btn.disabled = false;
+      btn && (btn.disabled = false);
     }
   });
 })();
