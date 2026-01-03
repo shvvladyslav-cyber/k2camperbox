@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>K2 CamperBox — Camper-Modul für Hochdachkombis | Anfrage & Bestellung</title>
-  <meta name="description" content="K2 CamperBox: modulares Camper-System für Caddy/Berlingo/Combo/… Schnell anfragen in Telegram + bequem per Revolut QR zahlen." />
+  <meta name="description" content="K2 CamperBox: модуль для кемпінгу в авто (Caddy/Berlingo/Combo/…): швидка заявка в Telegram + оплата Revolut QR." />
   <meta name="theme-color" content="#0a0f22" />
   <meta name="color-scheme" content="dark" />
 
@@ -19,20 +19,17 @@
 
   <link rel="stylesheet" href="/styles.css" />
 </head>
-
 <body>
   <div class="bg" aria-hidden="true">
     <div class="glow g1"></div>
     <div class="glow g2"></div>
     <div class="glow g3"></div>
-    <div class="grain"></div>
+    <div class="noise"></div>
   </div>
 
   <header class="topbar">
     <a class="brand" href="#top" aria-label="K2 CamperBox">
-      <span class="logoImg">
-        <img src="/assets/logo.png" alt="K2" width="44" height="44" loading="eager" />
-      </span>
+      <span class="logoImg"><img src="/assets/logo.png" alt="K2" width="42" height="42"/></span>
       <span class="brandtext">
         <span class="name">CamperBox</span>
         <span class="tag">Smart • Modular • Ready</span>
@@ -46,10 +43,10 @@
       <a href="#faq" data-i18n="nav_faq">FAQ</a>
       <a href="/configurator.html" data-i18n="nav_cfg">Konfigurator</a>
       <a href="/cabinet.html" data-i18n="nav_cab">Cabinet</a>
-      <a href="#contact" class="btn small btn-ghost" data-i18n="nav_contact">Kontakt</a>
+      <a href="#contact" class="btn small" data-i18n="nav_contact">Kontakt</a>
     </nav>
 
-    <div class="lang" aria-label="Language">
+    <div class="lang">
       <button class="chip active" data-lang="de" aria-pressed="true">DE</button>
       <button class="chip" data-lang="ua" aria-pressed="false">UA</button>
       <button class="chip" data-lang="ru" aria-pressed="false">RU</button>
@@ -60,57 +57,57 @@
     <section class="hero">
       <div class="heroLeft">
         <div class="badge" data-i18n="hero_badge">🇩🇪 Kassel • Deutschland • Lieferung/Einbau</div>
-
         <h1 data-i18n="hero_title">K2 CamperBox — dein Auto in 5 Minuten zum Camper</h1>
-
         <p class="lead" data-i18n="hero_lead">
           Modulares Camping-System für Hochdachkombis (Caddy / Berlingo / Combo / Doblo / Tourneo / …).
           Schnell anfragen in Telegram + bequeme Bezahlung über Revolut QR.
         </p>
 
         <div class="ctaRow">
-          <button class="btn btn-tg primary" id="btnRequest" data-i18n="cta_request">
-            <span class="ico" aria-hidden="true">
+          <button class="btn primary" id="btnRequest" data-i18n="cta_request">
+            <span class="btnIco" aria-hidden="true">
               <!-- Telegram icon -->
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                <path d="M20.7 3.6c.5-.2 1 .3.8.9l-3.2 15.3c-.1.5-.7.8-1.2.6l-5.2-2.1-2.6 2.5c-.4.4-1.1.1-1.1-.5v-3.9l9.2-8.7c.2-.2 0-.5-.3-.4L6.4 12.5c-.5.2-1.1 0-1.3-.5l-2-4.1c-.2-.5 0-1 .5-1.2L20.7 3.6Z" fill="currentColor"/>
+                <path d="M21.9 4.6c.2-.8-.6-1.4-1.3-1.1L2.9 10.6c-.9.4-.9 1.6.1 1.9l4.6 1.5 1.8 5.4c.3.9 1.5 1 2 .2l2.6-3.6 4.6 3.4c.7.5 1.8.1 2-.8L21.9 4.6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M8 13.9 19.7 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="txt">Anfrage in Telegram</span>
+            <span class="btnTxt">Anfrage in Telegram</span>
           </button>
 
-          <button class="btn btn-pay" id="btnPay" data-i18n="cta_pay">
-            <span class="ico" aria-hidden="true">
-              <!-- QR icon -->
+          <button class="btn accent" id="btnPay" data-i18n="cta_pay">
+            <span class="btnIco" aria-hidden="true">
+              <!-- QR / card icon -->
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                <path d="M4 4h6v6H4V4Zm2 2v2h2V6H6Zm8-2h6v6h-6V4Zm2 2v2h2V6h-2ZM4 14h6v6H4v-6Zm2 2v2h2v-2H6Zm10 0h2v2h-2v-2Zm-2-2h6v6h-6v-6Zm2 2v2h2v-2h-2Z" fill="currentColor"/>
+                <path d="M4 7V5a1 1 0 0 1 1-1h2M20 7V5a1 1 0 0 0-1-1h-2M4 17v2a1 1 0 0 0 1 1h2M20 17v2a1 1 0 0 1-1 1h-2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M7 8h4v4H7V8Zm6 0h4v4h-4V8ZM7 14h4v4H7v-4Zm9 2h1m-1 2h3" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
               </svg>
             </span>
-            <span class="txt">Revolut QR bezahlen</span>
+            <span class="btnTxt">Revolut QR bezahlen</span>
           </button>
 
-          <button class="btn btn-install btn-ghost" id="btnInstall" data-i18n="cta_install">
-            <span class="ico" aria-hidden="true">
+          <button class="btn ghost" id="btnInstall" data-i18n="cta_install">
+            <span class="btnIco" aria-hidden="true">
               <!-- Install icon -->
               <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                <path d="M12 3a1 1 0 0 1 1 1v8.6l2-2a1 1 0 1 1 1.4 1.4l-3.7 3.7a1 1 0 0 1-1.4 0L7.6 12a1 1 0 1 1 1.4-1.4l2 2V4a1 1 0 0 1 1-1Z" fill="currentColor"/>
-                <path d="M5 19a1 1 0 0 1 1-1h12a1 1 0 1 1 0 2H6a1 1 0 0 1-1-1Z" fill="currentColor"/>
+                <path d="M12 3v10m0 0 3-3m-3 3-3-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
               </svg>
             </span>
-            <span class="txt">App installieren</span>
+            <span class="btnTxt">App installieren</span>
           </button>
         </div>
 
         <div class="mini">
-          <div class="miniItem cardLive">
+          <div class="miniItem cardLite">
             <div class="miniK" data-i18n="mini_1_k">Schnell</div>
             <div class="miniV" data-i18n="mini_1_v">Aufbau 5–10 Min</div>
           </div>
-          <div class="miniItem cardLive">
+          <div class="miniItem cardLite">
             <div class="miniK" data-i18n="mini_2_k">Modular</div>
             <div class="miniV" data-i18n="mini_2_v">Boxen / Bett / Küche</div>
           </div>
-          <div class="miniItem cardLive">
+          <div class="miniItem cardLite">
             <div class="miniK" data-i18n="mini_3_k">Praktisch</div>
             <div class="miniV" data-i18n="mini_3_v">Für Alltag & Reise</div>
           </div>
@@ -118,52 +115,48 @@
       </div>
 
       <div class="heroRight">
-        <div class="card heroCard cardLive">
+        <div class="card heroCard live">
           <div class="cardTop">
             <div class="cardTitle" data-i18n="hero_card_title">Sofort-Angebot</div>
             <div class="pill" data-i18n="hero_card_pill">Heute antworten</div>
           </div>
-
           <div class="cardBody">
             <div class="row">
               <div class="label" data-i18n="hero_card_model">Auto/Modell</div>
               <input id="carModel" class="input" placeholder="z.B. VW Caddy Maxi" />
             </div>
-
             <div class="row">
               <div class="label" data-i18n="hero_card_wishes">Wünsche</div>
               <textarea id="wishes" class="input area" placeholder="Bett, Küche, Stauraum, Budget…"></textarea>
             </div>
-
             <div class="row2">
-              <button class="btn primary full btn-tg" id="btnSend" data-i18n="hero_card_send">
-                <span class="ico" aria-hidden="true">
+              <button class="btn primary full" id="btnSend" data-i18n="hero_card_send">
+                <span class="btnIco" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                    <path d="M20.7 3.6c.5-.2 1 .3.8.9l-3.2 15.3c-.1.5-.7.8-1.2.6l-5.2-2.1-2.6 2.5c-.4.4-1.1.1-1.1-.5v-3.9l9.2-8.7c.2-.2 0-.5-.3-.4L6.4 12.5c-.5.2-1.1 0-1.3-.5l-2-4.1c-.2-.5 0-1 .5-1.2L20.7 3.6Z" fill="currentColor"/>
+                    <path d="M21.9 4.6c.2-.8-.6-1.4-1.3-1.1L2.9 10.6c-.9.4-.9 1.6.1 1.9l4.6 1.5 1.8 5.4c.3.9 1.5 1 2 .2l2.6-3.6 4.6 3.4c.7.5 1.8.1 2-.8L21.9 4.6Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                    <path d="M8 13.9 19.7 6.8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                   </svg>
                 </span>
-                <span class="txt">In Telegram senden</span>
+                <span class="btnTxt">In Telegram senden</span>
               </button>
 
-              <button class="btn full btn-ghost" id="btnCopy" data-i18n="hero_card_copy">
-                <span class="ico" aria-hidden="true">
-                  <!-- Copy icon -->
+              <button class="btn full" id="btnCopy" data-i18n="hero_card_copy">
+                <span class="btnIco" aria-hidden="true">
                   <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                    <path d="M8 8a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2V8Z" fill="currentColor"/>
-                    <path d="M5 16H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1H10a2 2 0 0 0-2 2v8Z" fill="currentColor" opacity=".55"/>
+                    <path d="M9 9h10v10H9V9Z" stroke="currentColor" stroke-width="1.6" />
+                    <path d="M5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
                   </svg>
                 </span>
-                <span class="txt">Text kopieren</span>
+                <span class="btnTxt">Text kopieren</span>
               </button>
             </div>
-
             <div class="hint" data-i18n="hero_card_hint">
               Tipp: Wenn Telegram nicht öffnet — kopiere den Text und sende ihn an @k2camperbox.
             </div>
           </div>
         </div>
 
-        <div class="card stats cardLive">
+        <div class="card stats live">
           <div class="stat">
             <div class="statNum">DE/UA/RU</div>
             <div class="statLab" data-i18n="stat_1">3 Sprachen</div>
@@ -187,17 +180,17 @@
       </div>
 
       <div class="grid3">
-        <div class="tile cardLive">
+        <div class="tile live">
           <div class="tileIcon">🚐</div>
           <div class="tileTitle">VW Caddy</div>
           <div class="tileText" data-i18n="models_1">Caddy / Caddy Maxi — Alltag + Reise.</div>
         </div>
-        <div class="tile cardLive">
+        <div class="tile live">
           <div class="tileIcon">🧩</div>
           <div class="tileTitle">PSA</div>
           <div class="tileText" data-i18n="models_2">Berlingo / Rifter / Partner — modulare Boxen.</div>
         </div>
-        <div class="tile cardLive">
+        <div class="tile live">
           <div class="tileIcon">🛠️</div>
           <div class="tileTitle">Weitere</div>
           <div class="tileText" data-i18n="models_3">Combo / Doblo / Tourneo / Kangoo / …</div>
@@ -212,7 +205,7 @@
       </div>
 
       <div class="grid3">
-        <div class="priceCard cardLive">
+        <div class="priceCard live">
           <div class="pcTop">
             <div class="pcName" data-i18n="pkg_1_name">Start</div>
             <div class="pcPrice">€ —</div>
@@ -222,10 +215,10 @@
             <li data-i18n="pkg_1_b">Schneller Ein-/Ausbau</li>
             <li data-i18n="pkg_1_c">Leicht & stabil</li>
           </ul>
-          <button class="btn full btn-ghost" data-pkg="Start" data-i18n="pkg_btn">Anfragen</button>
+          <button class="btn full" data-pkg="Start" data-i18n="pkg_btn">Anfragen</button>
         </div>
 
-        <div class="priceCard featured cardLive">
+        <div class="priceCard featured live">
           <div class="pcTop">
             <div class="pcName" data-i18n="pkg_2_name">Comfort</div>
             <div class="pcPrice">€€ —</div>
@@ -238,7 +231,7 @@
           <button class="btn primary full" data-pkg="Comfort" data-i18n="pkg_btn">Anfragen</button>
         </div>
 
-        <div class="priceCard cardLive">
+        <div class="priceCard live">
           <div class="pcTop">
             <div class="pcName" data-i18n="pkg_3_name">Pro</div>
             <div class="pcPrice">€€€ —</div>
@@ -248,86 +241,63 @@
             <li data-i18n="pkg_3_b">12V / Power-Optionen</li>
             <li data-i18n="pkg_3_c">Individuelle Anpassung</li>
           </ul>
-          <button class="btn full btn-ghost" data-pkg="Pro" data-i18n="pkg_btn">Anfragen</button>
+          <button class="btn full" data-pkg="Pro" data-i18n="pkg_btn">Anfragen</button>
         </div>
       </div>
     </section>
 
-    <!-- PREMIUM OFFLINE GALLERY -->
+    <!-- ✅ OFFLINE LOCAL GALLERY + LIGHTBOX -->
     <section id="gallery" class="section">
       <div class="sectionHead">
         <h2 data-i18n="gallery_title">Galerie</h2>
-        <p class="muted" data-i18n="gallery_sub">Tippe auf ein Foto für Vollbild.</p>
+        <p class="muted" data-i18n="gallery_sub">Tippe auf ein Foto für Vollbild (offline).</p>
       </div>
 
       <div class="galleryGrid" id="galleryGrid">
-        <!-- локальные фото (офлайн) -->
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="0" aria-label="Open photo 1">
-            <img src="/assets/gallery-1.jpg" alt="CamperBox photo 1" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="1">CamperBox — Foto 1</figcaption>
+        <!-- Ты просто заменяешь файлы assets/gallery-1.jpg ... gallery-6.jpg -->
+        <figure class="shot live" data-caption="CamperBox • Foto 1">
+          <img src="/assets/gallery-1.jpg" alt="CamperBox Foto 1" loading="lazy" decoding="async">
         </figure>
-
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="1" aria-label="Open photo 2">
-            <img src="/assets/gallery-2.jpg" alt="CamperBox photo 2" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="2">CamperBox — Foto 2</figcaption>
+        <figure class="shot live" data-caption="CamperBox • Foto 2">
+          <img src="/assets/gallery-2.jpg" alt="CamperBox Foto 2" loading="lazy" decoding="async">
         </figure>
-
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="2" aria-label="Open photo 3">
-            <img src="/assets/gallery-3.jpg" alt="CamperBox photo 3" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="3">CamperBox — Foto 3</figcaption>
+        <figure class="shot live" data-caption="CamperBox • Foto 3">
+          <img src="/assets/gallery-3.jpg" alt="CamperBox Foto 3" loading="lazy" decoding="async">
         </figure>
-
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="3" aria-label="Open photo 4">
-            <img src="/assets/gallery-4.jpg" alt="CamperBox photo 4" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="4">CamperBox — Foto 4</figcaption>
+        <figure class="shot live" data-caption="CamperBox • Foto 4">
+          <img src="/assets/gallery-4.jpg" alt="CamperBox Foto 4" loading="lazy" decoding="async">
         </figure>
-
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="4" aria-label="Open photo 5">
-            <img src="/assets/gallery-5.jpg" alt="CamperBox photo 5" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="5">CamperBox — Foto 5</figcaption>
+        <figure class="shot live" data-caption="CamperBox • Foto 5">
+          <img src="/assets/gallery-5.jpg" alt="CamperBox Foto 5" loading="lazy" decoding="async">
         </figure>
-
-        <figure class="gItem cardLive">
-          <button class="gBtn" type="button" data-lb="5" aria-label="Open photo 6">
-            <img src="/assets/gallery-6.jpg" alt="CamperBox photo 6" loading="lazy" />
-          </button>
-          <figcaption class="gCap" data-cap="6">CamperBox — Foto 6</figcaption>
+        <figure class="shot live" data-caption="CamperBox • Foto 6">
+          <img src="/assets/gallery-6.jpg" alt="CamperBox Foto 6" loading="lazy" decoding="async">
         </figure>
       </div>
 
       <div class="note" data-i18n="gallery_note">
-        Offline: lege Dateien ab als /assets/gallery-1.jpg … /assets/gallery-6.jpg. (Подписи потом подстроишь под реальные фото.)
+        Файлы фото: /assets/gallery-1.jpg … /assets/gallery-6.jpg (замени на свои).
       </div>
     </section>
 
     <section id="faq" class="section">
       <div class="sectionHead">
         <h2 data-i18n="faq_title">FAQ</h2>
-        <p class="muted" data-i18n="faq_sub">Kurz & ehrlich — für Einsteiger.</p>
+        <p class="muted" data-i18n="faq_sub">Kurz & ehrlich — для чайника.</p>
       </div>
 
       <div class="faq">
-        <details open class="cardLive">
+        <details open class="live">
           <summary data-i18n="faq_q1">Wie schnell kann ich bestellen?</summary>
           <div class="faqA" data-i18n="faq_a1">Schreib in Telegram, wir klären Auto + Optionen. Danach bekommst du Preis & срок.</div>
         </details>
-        <details class="cardLive">
+        <details class="live">
           <summary data-i18n="faq_q2">Kann ich mit Revolut bezahlen?</summary>
-          <div class="faqA" data-i18n="faq_a2">Ja. Klicke „Revolut QR bezahlen“ — QR öffnet sich. In Revolut scannen und zahlen.</div>
+          <div class="faqA" data-i18n="faq_a2">Ja. Нажми «Revolut QR bezahlen» — откроется окно с QR-кодом. Сканируешь в Revolut и оплачиваешь.</div>
         </details>
-        <details class="cardLive">
+        <details class="live">
           <summary data-i18n="faq_q3">App installieren?</summary>
-          <div class="faqA" data-i18n="faq_a3">Öffne die Website in Chrome → „App installieren“. Oder klicke den Button „App installieren“.</div>
+          <div class="faqA" data-i18n="faq_a3">Да. Открой сайт в Chrome → «Установить приложение». Или нажми кнопку «App installieren».</div>
         </details>
       </div>
     </section>
@@ -335,10 +305,10 @@
     <section id="request" class="section">
       <div class="sectionHead">
         <h2 data-i18n="form_title">Anfrage-Formular</h2>
-        <p class="muted" data-i18n="form_sub">Sende Anfrage direkt in Google Sheets (Apps Script).</p>
+        <p class="muted" data-i18n="form_sub">Отправка заявки в Google Sheets (через Apps Script).</p>
       </div>
 
-      <div class="card cardLive" style="padding:14px">
+      <div class="card live" style="padding:14px">
         <form id="leadForm" class="form">
           <div class="formGrid">
             <div class="row">
@@ -365,27 +335,13 @@
           </div>
 
           <div class="ctaRow" style="margin-top:10px">
-            <button class="btn primary" type="submit" id="btnSubmitLead" data-i18n="f_send">
-              <span class="ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                  <path d="M4 12l16-8-6 16-3-6-7-2Z" fill="currentColor"/>
-                </svg>
-              </span>
-              <span class="txt">In Sheets senden</span>
-            </button>
-            <a class="btn btn-ghost" href="/crm.html" data-i18n="f_open_crm">Mini-CRM öffnen</a>
-            <button class="btn btn-ghost btn-tg" type="button" id="btnSendTg2" data-i18n="f_send_tg">
-              <span class="ico" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="18" height="18" fill="none">
-                  <path d="M20.7 3.6c.5-.2 1 .3.8.9l-3.2 15.3c-.1.5-.7.8-1.2.6l-5.2-2.1-2.6 2.5c-.4.4-1.1.1-1.1-.5v-3.9l9.2-8.7c.2-.2 0-.5-.3-.4L6.4 12.5c-.5.2-1.1 0-1.3-.5l-2-4.1c-.2-.5 0-1 .5-1.2L20.7 3.6Z" fill="currentColor"/>
-                </svg>
-              </span>
-              <span class="txt">Oder in Telegram senden</span>
-            </button>
+            <button class="btn primary" type="submit" id="btnSubmitLead" data-i18n="f_send">In Sheets senden</button>
+            <a class="btn" href="/crm.html" data-i18n="f_open_crm">Mini-CRM öffnen</a>
+            <button class="btn ghost" type="button" id="btnSendTg2" data-i18n="f_send_tg">Oder in Telegram senden</button>
           </div>
 
           <div class="hint" data-i18n="f_hint">
-            Damit das Formular funktioniert: Apps Script URL in crm-config.js eintragen. Sonst nutze Telegram.
+            Чтобы форма работала: вставь Apps Script URL в crm-config.js. Если не настроено — используй Telegram.
           </div>
         </form>
       </div>
@@ -394,11 +350,11 @@
     <section id="contact" class="section">
       <div class="sectionHead">
         <h2 data-i18n="contact_title">Kontakt</h2>
-        <p class="muted" data-i18n="contact_sub">Alles klickbar: Telegram • Telefon • Email • Zahlung.</p>
+        <p class="muted" data-i18n="contact_sub">Alles кликабельно: Telegram • Telefon • Email • Zahlung.</p>
       </div>
 
       <div class="contactGrid">
-        <a class="contactCard cardLive" href="https://t.me/k2camperbox" target="_blank" rel="noopener">
+        <a class="contactCard live" href="https://t.me/k2camperbox" target="_blank" rel="noopener">
           <div class="ccIcon">✈️</div>
           <div>
             <div class="ccTitle">Telegram</div>
@@ -406,7 +362,7 @@
           </div>
         </a>
 
-        <a class="contactCard cardLive" href="tel:+4916096527272">
+        <a class="contactCard live" href="tel:+4916096527272">
           <div class="ccIcon">📞</div>
           <div>
             <div class="ccTitle" data-i18n="contact_phone">Telefon</div>
@@ -414,7 +370,7 @@
           </div>
         </a>
 
-        <a class="contactCard cardLive" href="mailto:k2camperbox@gmail.com?subject=K2%20CamperBox%20Anfrage">
+        <a class="contactCard live" href="mailto:k2camperbox@gmail.com?subject=K2%20CamperBox%20Anfrage">
           <div class="ccIcon">✉️</div>
           <div>
             <div class="ccTitle">Email</div>
@@ -422,7 +378,7 @@
           </div>
         </a>
 
-        <button class="contactCard pay cardLive" id="btnPay2" type="button">
+        <button class="contactCard pay live" id="btnPay2" type="button">
           <div class="ccIcon">💳</div>
           <div>
             <div class="ccTitle" data-i18n="contact_pay">Bezahlen</div>
@@ -443,10 +399,10 @@
     </section>
 
     <div class="mobileBar">
-      <a class="btn primary" href="#request" data-i18n="mob_request">Anfrage</a>
-      <button class="btn btn-pay" id="mobPay" data-i18n="mob_pay">QR</button>
-      <a class="btn btn-ghost" href="/configurator.html" data-i18n="mob_cfg">LEGO</a>
-      <a class="btn btn-ghost" href="/cabinet.html" data-i18n="mob_cab">Cabinet</a>
+      <a class="btn primary" href="#request" data-i18n="mob_request">Заявка</a>
+      <button class="btn" id="mobPay" data-i18n="mob_pay">QR</button>
+      <a class="btn" href="/configurator.html" data-i18n="mob_cfg">LEGO</a>
+      <a class="btn" href="/cabinet.html" data-i18n="mob_cab">Cabinet</a>
     </div>
   </main>
 
@@ -461,38 +417,35 @@
 
       <div class="modalBody">
         <div class="qrWrap">
-          <img src="/assets/revolut-qr.png" alt="Revolut QR" class="qr" loading="lazy" />
-          <div class="qrHint" data-i18n="pay_hint">Revolut öffnen → Scan → QR scannen → bezahlen.</div>
+          <img src="/assets/revolut-qr.png" alt="Revolut QR" class="qr" />
+          <div class="qrHint" data-i18n="pay_hint">Открой Revolut → Scan → наведи на QR → оплати.</div>
         </div>
 
         <div class="payInfo">
           <div class="piRow"><span data-i18n="pay_to">Empfänger:</span> <b>@k2camperbox</b></div>
-          <div class="piRow"><span data-i18n="pay_note">Kommentar:</span> <b>K2 CamperBox</b></div>
+          <div class="piRow"><span data-i18n="pay_note">Комментарий:</span> <b>K2 CamperBox</b></div>
           <div class="piRow small" data-i18n="pay_replace">
-            Wichtig: Das ist ein Demo-QR. Ersetze /assets/revolut-qr.png mit deinem echten Revolut-QR.
+            Важно: это демо QR. Замени файл /assets/revolut-qr.png на твой реальный QR из Revolut.
           </div>
         </div>
 
         <div class="modalActions">
-          <a class="btn full btn-ghost" href="/assets/revolut-qr.png" download data-i18n="pay_download">QR herunterladen</a>
-          <button class="btn primary full" data-close data-i18n="pay_close">Schließen</button>
+          <a class="btn full" href="/assets/revolut-qr.png" download data-i18n="pay_download">Скачать QR</a>
+          <button class="btn primary full" data-close data-i18n="pay_close">Закрыть</button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Lightbox (Gallery) -->
-  <div class="lightbox" id="lb" aria-hidden="true">
+  <!-- ✅ Lightbox (offline, local) -->
+  <div class="lightbox" id="lightbox" aria-hidden="true">
     <div class="lbBack" data-lb-close></div>
-    <div class="lbCard" role="dialog" aria-modal="true" aria-label="Gallery viewer">
-      <button class="lbX" type="button" data-lb-close aria-label="Close">✕</button>
-      <button class="lbNav prev" type="button" data-lb-prev aria-label="Previous">‹</button>
-      <button class="lbNav next" type="button" data-lb-next aria-label="Next">›</button>
-
-      <div class="lbMedia">
-        <img id="lbImg" alt="Gallery photo" />
-      </div>
-      <div class="lbCap" id="lbCap">CamperBox</div>
+    <div class="lbCard" role="dialog" aria-modal="true" aria-label="Gallery preview">
+      <button class="lbX" data-lb-close aria-label="Close">✕</button>
+      <button class="lbNav prev" data-lb-prev aria-label="Previous">‹</button>
+      <button class="lbNav next" data-lb-next aria-label="Next">›</button>
+      <img class="lbImg" id="lbImg" alt="Preview" />
+      <div class="lbCap" id="lbCap"></div>
     </div>
   </div>
 
