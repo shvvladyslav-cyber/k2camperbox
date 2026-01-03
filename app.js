@@ -1,87 +1,71 @@
-/* app.js — K2 CamperBox (premium + fixed)
-   ✅ фикс: кнопка “App installieren” скрывается после установки + при запуске как PWA
-   ✅ фикс: переводы — добавлены недостающие ключи RU + общая проверка i18n
-   ✅ улучшение: корректное поведение install-кнопки (beforeinstallprompt / appinstalled / display-mode)
-   ✅ улучшение: перевод плейсхолдеров (carModel / wishes + form placeholders)
-   ✅ оставлено быстрым: без тяжёлых библиотек
+/* app.js — K2 CamperBox (premium v2)
+   - i18n (DE/UA/RU) + placeholders
+   - Telegram request + copy
+   - Install button hides when installed
+   - Revolut modal
+   - Local OFFLINE gallery + Lightbox (prev/next/esc)
+   - Micro ripple effect on buttons (fast)
 */
 (() => {
-  'use strict';
+  "use strict";
 
   const $ = (s, root = document) => root.querySelector(s);
-  const $$ = (s, root = document) => [...root.querySelectorAll(s)];
+  const $$ = (s, root = document) => Array.from(root.querySelectorAll(s));
 
   const cfg = {
     telegram: "https://t.me/k2camperbox",
     telegramUsername: "@k2camperbox",
     phone: "+4916096527272",
     email: "k2camperbox@gmail.com",
-    projectName: "K2 CamperBox"
+    projectName: "K2 CamperBox",
   };
 
-  // ---------- i18n ----------
   const i18n = {
     de: {
       nav_models:"Modelle", nav_packages:"Pakete", nav_gallery:"Galerie", nav_faq:"FAQ", nav_contact:"Kontakt",
       nav_cfg:"Konfigurator", nav_cab:"Cabinet",
-
       hero_badge:"🇩🇪 Kassel • Deutschland • Lieferung/Einbau",
       hero_title:"K2 CamperBox — dein Auto in 5 Minuten zum Camper",
       hero_lead:"Modulares Camping-System für Hochdachkombis (Caddy / Berlingo / Combo / Doblo / Tourneo / …). Schnell anfragen in Telegram + bequeme Bezahlung über Revolut QR.",
       cta_request:"Anfrage in Telegram", cta_pay:"Revolut QR bezahlen", cta_install:"App installieren",
-
       mini_1_k:"Schnell", mini_1_v:"Aufbau 5–10 Min",
       mini_2_k:"Modular", mini_2_v:"Boxen / Bett / Küche",
       mini_3_k:"Praktisch", mini_3_v:"Für Alltag & Reise",
-
       hero_card_title:"Sofort-Angebot", hero_card_pill:"Heute antworten",
       hero_card_model:"Auto/Modell", hero_card_wishes:"Wünsche",
       hero_card_send:"In Telegram senden", hero_card_copy:"Text kopieren",
       hero_card_hint:"Tipp: Wenn Telegram nicht öffnet — kopiere den Text und sende ihn an @k2camperbox.",
-
       stat_1:"3 Sprachen", stat_2:"als App installierbar", stat_3:"Revolut Bezahlung",
-
       models_title:"Für welche Autos?", models_sub:"Hochdachkombis & kompakte Vans — wir passen das Modul an.",
       models_1:"Caddy / Caddy Maxi — Alltag + Reise.",
       models_2:"Berlingo / Rifter / Partner — modulare Boxen.",
       models_3:"Combo / Doblo / Tourneo / Kangoo / …",
-
       packages_title:"Pakete", packages_sub:"Beispiele. Endpreis hängt vom Auto und den Optionen ab.",
       pkg_1_name:"Start", pkg_1_a:"Bettplatte + Grund-Boxen", pkg_1_b:"Schneller Ein-/Ausbau", pkg_1_c:"Leicht & stabil",
       pkg_2_name:"Comfort", pkg_2_a:"Mehr Stauraum + Orga", pkg_2_b:"Matratze / Polster-Set", pkg_2_c:"Option: Auszug-Tisch",
       pkg_3_name:"Pro", pkg_3_a:"Küchen-Modul + Wasser", pkg_3_b:"12V / Power-Optionen", pkg_3_c:"Individuelle Anpassung",
       pkg_btn:"Anfragen",
-
-      gallery_title:"Galerie (Platzhalter)", gallery_sub:"Tausche diese Bilder gegen deine echten Fotos (siehe Anleitung unten).",
-      gallery_note:"Foto-Dateien: /assets/gallery-1.jpg … /assets/gallery-4.jpg (du kannst deine hochladen).",
-
+      gallery_title:"Galerie", gallery_sub:"Tippe auf ein Foto für Vollbild (offline).",
+      gallery_note:"Фото-файлы: /assets/gallery-1.jpg … /assets/gallery-6.jpg (замени на свои).",
       faq_title:"FAQ", faq_sub:"Kurz & ehrlich — für Einsteiger.",
       faq_q1:"Wie schnell kann ich bestellen?", faq_a1:"Schreib in Telegram, wir klären Auto + Optionen. Danach bekommst du Preis & срок.",
       faq_q2:"Kann ich mit Revolut bezahlen?", faq_a2:"Ja. Klicke „Revolut QR bezahlen“ — QR öffnet sich. In Revolut scannen und zahlen.",
       faq_q3:"App installieren?", faq_a3:"Öffne die Website in Chrome → „App installieren“. Oder klicke den Button „App installieren“.",
-
-      form_title:"Anfrage-Formular",
-      form_sub:"Sende Anfrage direkt in Google Sheets (Apps Script).",
+      form_title:"Anfrage-Formular", form_sub:"Sende Anfrage direkt in Google Sheets (Apps Script).",
       f_name:"Name", f_phone:"Telefon", f_email:"Email", f_car:"Auto/Modell", f_msg:"Nachricht",
       f_send:"In Sheets senden", f_open_crm:"Mini-CRM öffnen", f_send_tg:"Oder in Telegram senden",
       f_hint:"Damit das Formular funktioniert: Apps Script URL in crm-config.js eintragen. Sonst nutze Telegram.",
-
       contact_title:"Kontakt", contact_sub:"Alles klickbar: Telegram • Telefon • Email • Zahlung.",
       contact_phone:"Telefon", contact_pay:"Bezahlen", contact_pay_sub:"Revolut QR",
       footer_top:"Nach oben",
-
       pay_title:"Revolut QR bezahlen", pay_hint:"Revolut öffnen → Scan → QR scannen → bezahlen.",
       pay_to:"Empfänger:", pay_note:"Kommentar:",
       pay_replace:"Wichtig: Das ist ein Demo-QR. Ersetze /assets/revolut-qr.png mit deinem echten Revolut-QR.",
       pay_download:"QR herunterladen", pay_close:"Schließen",
-
       mob_request:"Anfrage", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Cabinet",
-
       toast_copied:"Kopiert ✅",
-      toast_installed:"Installiert ✅",
       toast_install_tip:"Chrome → Menü → App installieren",
-
-      // placeholders
+      toast_installed:"Installiert ✅",
       ph_car:"z.B. VW Caddy Maxi",
       ph_wishes:"Bett, Küche, Stauraum, Budget…",
       ph_name:"Max",
@@ -89,68 +73,51 @@
       ph_email:"you@mail.com",
       ph_msg:"Bett/Küche/Budget/..."
     },
-
     ua: {
       nav_models:"Авто", nav_packages:"Пакети", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакти",
       nav_cfg:"Конфігуратор", nav_cab:"Кабінет",
-
       hero_badge:"🇩🇪 Кассель • Німеччина • Доставка/монтаж",
       hero_title:"K2 CamperBox — перетвори авто на кемпер за 5 хвилин",
       hero_lead:"Модульна система для мінівенів/«каблучків» (Caddy / Berlingo / Combo / Doblo / Tourneo / …). Швидка заявка в Telegram + оплата через Revolut QR.",
       cta_request:"Заявка в Telegram", cta_pay:"Оплатити Revolut QR", cta_install:"Встановити додаток",
-
       mini_1_k:"Швидко", mini_1_v:"Монтаж 5–10 хв",
       mini_2_k:"Модульно", mini_2_v:"Бокси / ліжко / кухня",
       mini_3_k:"Зручно", mini_3_v:"Для міста й подорожей",
-
       hero_card_title:"Швидкий запит", hero_card_pill:"Відповімо сьогодні",
       hero_card_model:"Авто/модель", hero_card_wishes:"Побажання",
       hero_card_send:"Надіслати в Telegram", hero_card_copy:"Скопіювати текст",
       hero_card_hint:"Порада: якщо Telegram не відкрився — скопіюй текст і надішли @k2camperbox.",
-
       stat_1:"3 мови", stat_2:"можна встановити як App", stat_3:"оплата Revolut",
-
       models_title:"Для яких авто?", models_sub:"«Каблучки» та компактні вени — адаптуємо під твоє авто.",
       models_1:"Caddy / Caddy Maxi — місто + подорож.",
       models_2:"Berlingo / Rifter / Partner — модульні бокси.",
       models_3:"Combo / Doblo / Tourneo / Kangoo / …",
-
       packages_title:"Пакети", packages_sub:"Приклади. Фінальна ціна залежить від авто та опцій.",
       pkg_1_name:"Start", pkg_1_a:"Основа-ліжко + базові бокси", pkg_1_b:"Швидкий монтаж/демонтаж", pkg_1_c:"Легко та міцно",
       pkg_2_name:"Comfort", pkg_2_a:"Більше зберігання + органайзери", pkg_2_b:"Матрац / комплект подушок", pkg_2_c:"Опція: висувний столик",
       pkg_3_name:"Pro", pkg_3_a:"Кухонний модуль + вода", pkg_3_b:"12V / енергетичні опції", pkg_3_c:"Індивідуальна адаптація",
       pkg_btn:"Запитати",
-
-      gallery_title:"Галерея (плейсхолдер)", gallery_sub:"Заміни ці картинки на свої фото (див. інструкцію нижче).",
-      gallery_note:"Файли фото: /assets/gallery-1.jpg … /assets/gallery-4.jpg (можеш залити свої).",
-
+      gallery_title:"Галерея", gallery_sub:"Торкнись фото для перегляду (офлайн).",
+      gallery_note:"Файли фото: /assets/gallery-1.jpg … /assets/gallery-6.jpg (заміни на свої).",
       faq_title:"FAQ", faq_sub:"Коротко і по-людськи — для новачків.",
       faq_q1:"Як швидко можна замовити?", faq_a1:"Напиши в Telegram, уточнимо авто + опції. Потім ціна і строки.",
       faq_q2:"Можна оплатити через Revolut?", faq_a2:"Так. Натисни «Оплатити Revolut QR» — відкриється QR. Скануй у Revolut і плати.",
       faq_q3:"Як встановити додаток?", faq_a3:"Відкрий сайт у Chrome → «Встановити». Або натисни кнопку «Встановити додаток».",
-
-      form_title:"Форма заявки",
-      form_sub:"Надсилає заявку в Google Sheets (через Apps Script).",
+      form_title:"Форма заявки", form_sub:"Надсилає заявку в Google Sheets (через Apps Script).",
       f_name:"Імʼя", f_phone:"Телефон", f_email:"Email", f_car:"Авто/модель", f_msg:"Повідомлення",
       f_send:"Надіслати в Sheets", f_open_crm:"Відкрити Mini-CRM", f_send_tg:"Або надіслати в Telegram",
       f_hint:"Щоб форма працювала: встав Apps Script URL у crm-config.js. Якщо не налаштовано — використовуй Telegram.",
-
       contact_title:"Контакти", contact_sub:"Все клікабельне: Telegram • Телефон • Email • Оплата.",
       contact_phone:"Телефон", contact_pay:"Оплата", contact_pay_sub:"Revolut QR",
       footer_top:"Вгору",
-
       pay_title:"Оплата Revolut QR", pay_hint:"Відкрий Revolut → Scan → наведи на QR → оплати.",
       pay_to:"Одержувач:", pay_note:"Коментар:",
       pay_replace:"Важливо: це демо QR. Заміни /assets/revolut-qr.png на твій реальний QR з Revolut.",
       pay_download:"Завантажити QR", pay_close:"Закрити",
-
       mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабінет",
-
       toast_copied:"Скопійовано ✅",
-      toast_installed:"Встановлено ✅",
       toast_install_tip:"Chrome → Меню → Встановити",
-
-      // placeholders
+      toast_installed:"Встановлено ✅",
       ph_car:"напр. VW Caddy Maxi",
       ph_wishes:"Ліжко, кухня, зберігання, бюджет…",
       ph_name:"Макс",
@@ -158,68 +125,51 @@
       ph_email:"you@mail.com",
       ph_msg:"Ліжко/кухня/бюджет/..."
     },
-
     ru: {
       nav_models:"Авто", nav_packages:"Пакеты", nav_gallery:"Галерея", nav_faq:"FAQ", nav_contact:"Контакты",
       nav_cfg:"Конфигуратор", nav_cab:"Кабинет",
-
       hero_badge:"🇩🇪 Кассель • Германия • Доставка/установка",
       hero_title:"K2 CamperBox — превращаем авто в кемпер за 5 минут",
       hero_lead:"Модульная система для «каблучков» и компактных ванов (Caddy / Berlingo / Combo / Doblo / Tourneo / …). Быстрая заявка в Telegram + оплата через Revolut QR.",
       cta_request:"Заявка в Telegram", cta_pay:"Оплата Revolut QR", cta_install:"Установить приложение",
-
       mini_1_k:"Быстро", mini_1_v:"Установка 5–10 мин",
       mini_2_k:"Модульно", mini_2_v:"Боксы / кровать / кухня",
       mini_3_k:"Удобно", mini_3_v:"На каждый день и в поездку",
-
       hero_card_title:"Быстрый расчет", hero_card_pill:"Ответим сегодня",
       hero_card_model:"Авто/модель", hero_card_wishes:"Пожелания",
       hero_card_send:"Отправить в Telegram", hero_card_copy:"Скопировать текст",
       hero_card_hint:"Подсказка: если Telegram не открылся — скопируй текст и отправь @k2camperbox.",
-
       stat_1:"3 языка", stat_2:"ставится как App", stat_3:"оплата Revolut",
-
       models_title:"Для каких авто?", models_sub:"«Каблучки» и компактные ваны — адаптируем модуль.",
       models_1:"Caddy / Caddy Maxi — город + путешествия.",
       models_2:"Berlingo / Rifter / Partner — модульные боксы.",
       models_3:"Combo / Doblo / Tourneo / Kangoo / …",
-
       packages_title:"Пакеты", packages_sub:"Примеры. Итоговая цена зависит от авто и опций.",
       pkg_1_name:"Start", pkg_1_a:"Основа-кровать + базовые боксы", pkg_1_b:"Быстрая установка/снятие", pkg_1_c:"Легко и надежно",
       pkg_2_name:"Comfort", pkg_2_a:"Больше хранения + организация", pkg_2_b:"Матрас / комплект подушек", pkg_2_c:"Опция: выдвижной столик",
       pkg_3_name:"Pro", pkg_3_a:"Кухонный модуль + вода", pkg_3_b:"12V / питание", pkg_3_c:"Индивидуальная подгонка",
       pkg_btn:"Узнать цену",
-
-      gallery_title:"Галерея", gallery_sub:"Нажми на фото для просмотра.",
+      gallery_title:"Галерея", gallery_sub:"Нажми на фото для просмотра (офлайн).",
       gallery_note:"Файлы фото: /assets/gallery-1.jpg … /assets/gallery-6.jpg (замени на свои).",
-
       faq_title:"FAQ", faq_sub:"Коротко и по-человечески — для чайника.",
       faq_q1:"Как быстро можно заказать?", faq_a1:"Напиши в Telegram, уточним авто + опции. Потом цена и сроки.",
       faq_q2:"Можно оплатить Revolut?", faq_a2:"Да. Нажми «Оплата Revolut QR» — откроется окно с QR. Сканируешь в Revolut и оплачиваешь.",
       faq_q3:"Как установить приложение?", faq_a3:"Открой сайт в Chrome → «Установить приложение». Или нажми кнопку «Установить приложение».",
-
-      form_title:"Форма заявки",
-      form_sub:"Отправка заявки в Google Sheets (через Apps Script).",
+      form_title:"Форма заявки", form_sub:"Отправка заявки в Google Sheets (через Apps Script).",
       f_name:"Имя", f_phone:"Телефон", f_email:"Email", f_car:"Авто/модель", f_msg:"Сообщение",
       f_send:"Отправить в Sheets", f_open_crm:"Открыть Mini-CRM", f_send_tg:"Или отправить в Telegram",
       f_hint:"Чтобы форма работала: вставь Apps Script URL в crm-config.js. Если не настроено — используй Telegram.",
-
       contact_title:"Контакты", contact_sub:"Все кликабельно: Telegram • Телефон • Email • Оплата.",
       contact_phone:"Телефон", contact_pay:"Оплата", contact_pay_sub:"Revolut QR",
       footer_top:"Наверх",
-
       pay_title:"Оплата Revolut QR", pay_hint:"Открой Revolut → Scan → наведи на QR → оплати.",
       pay_to:"Получатель:", pay_note:"Комментарий:",
       pay_replace:"Важно: это демо QR. Замени /assets/revolut-qr.png на свой реальный QR из Revolut.",
       pay_download:"Скачать QR", pay_close:"Закрыть",
-
       mob_request:"Заявка", mob_pay:"QR", mob_cfg:"LEGO", mob_cab:"Кабинет",
-
       toast_copied:"Скопировано ✅",
-      toast_installed:"Установлено ✅",
       toast_install_tip:"Chrome → Меню → Установить приложение",
-
-      // placeholders
+      toast_installed:"Установлено ✅",
       ph_car:"например VW Caddy Maxi",
       ph_wishes:"Кровать, кухня, хранение, бюджет…",
       ph_name:"Макс",
@@ -229,10 +179,10 @@
     }
   };
 
-  const langGet = () => (localStorage.getItem("k2_lang") || "de");
-  const t = (key) => i18n[langGet()]?.[key] ?? i18n.de[key] ?? "";
+  const getLang = () => localStorage.getItem("k2_lang") || "de";
+  const t = (key) => i18n[getLang()]?.[key] ?? i18n.de?.[key] ?? "";
 
-  // ---------- Toast ----------
+  // Toast (single)
   const toast = (msg) => {
     let el = $("#toast");
     if (!el) {
@@ -250,19 +200,31 @@
     toast._tm = setTimeout(() => (el.style.opacity = "0"), 1400);
   };
 
-  // ---------- Translate text nodes + placeholders ----------
-  const setPlaceholders = () => {
-    const map = {
-      carModel: "ph_car",
-      wishes: "ph_wishes"
-    };
-    Object.entries(map).forEach(([id, key]) => {
-      const el = document.getElementById(id);
-      if (el) el.placeholder = t(key);
-    });
+  // Ripple micro-animation (fast)
+  const enableRipple = () => {
+    document.addEventListener("pointerdown", (e) => {
+      const btn = e.target.closest(".btn");
+      if (!btn) return;
+      const rect = btn.getBoundingClientRect();
+      const r = document.createElement("span");
+      r.className = "ripple";
+      const size = Math.max(rect.width, rect.height);
+      r.style.width = r.style.height = size + "px";
+      r.style.left = (e.clientX - rect.left - size / 2) + "px";
+      r.style.top = (e.clientY - rect.top - size / 2) + "px";
+      btn.appendChild(r);
+      setTimeout(() => r.remove(), 650);
+    }, { passive: true });
+  };
 
-    // lead form placeholders
-    const form = document.getElementById("leadForm");
+  // Placeholders translate
+  const setPlaceholders = () => {
+    const cm = $("#carModel");
+    const ws = $("#wishes");
+    if (cm) cm.placeholder = t("ph_car");
+    if (ws) ws.placeholder = t("ph_wishes");
+
+    const form = $("#leadForm");
     if (form) {
       const name = form.querySelector('input[name="name"]');
       const phone = form.querySelector('input[name="phone"]');
@@ -288,15 +250,16 @@
 
     $$("[data-i18n]").forEach((el) => {
       const key = el.getAttribute("data-i18n");
-      const v = i18n[lang]?.[key];
-      if (typeof v === "string") el.textContent = v;
+      const val = i18n[lang]?.[key] ?? i18n.de?.[key];
+      if (typeof val === "string") el.textContent = val;
     });
 
     localStorage.setItem("k2_lang", lang);
     setPlaceholders();
+    updateInstallUI();
   };
 
-  // ---------- Telegram message ----------
+  // Telegram message
   const buildMessage = (pkg) => {
     const model = ($("#carModel")?.value || "").trim();
     const wishes = ($("#wishes")?.value || "").trim();
@@ -313,67 +276,49 @@
     return lines.join("\n");
   };
 
-  const openTelegram = (text) => {
-    // копируем, чтобы человек просто вставил (самый надёжный сценарий)
-    navigator.clipboard?.writeText(text).catch(() => {});
+  const openTelegram = async (text) => {
+    try { await navigator.clipboard?.writeText(text); } catch(_) {}
     window.open(cfg.telegram, "_blank", "noopener");
   };
 
-  // ---------- Pay Modal ----------
-  const modal = $("#payModal");
-  const openPay = () => {
-    if (!modal) return;
-    modal.classList.add("show");
-    modal.setAttribute("aria-hidden", "false");
-  };
-  const closePay = () => {
-    if (!modal) return;
-    modal.classList.remove("show");
-    modal.setAttribute("aria-hidden", "true");
-  };
+  // Pay modal
+  const payModal = $("#payModal");
+  const openPay = () => { payModal?.classList.add("show"); payModal?.setAttribute("aria-hidden","false"); };
+  const closePay = () => { payModal?.classList.remove("show"); payModal?.setAttribute("aria-hidden","true"); };
 
-  // ---------- PWA Install button (FIXED) ----------
+  // Install button logic
   let deferredPrompt = null;
 
   const isStandalone = () => {
-    // Android/desktop: display-mode standalone
-    const mql = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
-    // iOS Safari installed
-    const iosStandalone = typeof navigator !== "undefined" && "standalone" in navigator && navigator.standalone;
-    return Boolean(mql || iosStandalone);
+    const dm = window.matchMedia && window.matchMedia("(display-mode: standalone)").matches;
+    const ios = typeof navigator.standalone === "boolean" && navigator.standalone;
+    return !!(dm || ios);
   };
 
   const hideInstallBtn = () => {
-    const btn = $("#btnInstall");
-    if (!btn) return;
-    btn.style.display = "none";
-    btn.setAttribute("aria-hidden", "true");
+    const b = $("#btnInstall");
+    if (!b) return;
+    b.style.display = "none";
+    b.setAttribute("aria-hidden", "true");
   };
 
   const showInstallBtn = () => {
-    const btn = $("#btnInstall");
-    if (!btn) return;
-    btn.style.display = "";
-    btn.setAttribute("aria-hidden", "false");
+    const b = $("#btnInstall");
+    if (!b) return;
+    b.style.display = "";
+    b.setAttribute("aria-hidden", "false");
   };
 
   const updateInstallUI = () => {
-    // Если уже установлен — кнопка должна исчезнуть
-    if (isStandalone()) {
-      hideInstallBtn();
-      return;
-    }
-
-    // Если браузер не даёт install (нет beforeinstallprompt) — оставляем кнопку,
-    // но при клике показываем подсказку (так удобнее пользователю).
+    const b = $("#btnInstall");
+    if (!b) return;
+    if (isStandalone()) { hideInstallBtn(); return; }
     showInstallBtn();
-
-    // Если prompt доступен — делаем кнопку “активной” (у тебя это ghost-логика)
-    if (deferredPrompt) $("#btnInstall")?.classList.remove("ghost");
+    if (deferredPrompt) b.classList.remove("ghost");
+    else b.classList.add("ghost");
   };
 
   window.addEventListener("beforeinstallprompt", (e) => {
-    // Chrome/Edge: ловим событие, чтобы управлять кнопкой
     e.preventDefault();
     deferredPrompt = e;
     updateInstallUI();
@@ -382,59 +327,104 @@
   window.addEventListener("appinstalled", () => {
     deferredPrompt = null;
     toast(t("toast_installed"));
-    hideInstallBtn();            // ✅ главное: скрыть сразу
-    // на всякий случай обновим состояние
+    hideInstallBtn();
     setTimeout(updateInstallUI, 250);
   });
 
-  // если вкладка вернулась — проверим режим (иногда меняется без перезагрузки)
   document.addEventListener("visibilitychange", () => {
     if (!document.hidden) updateInstallUI();
   });
 
   const installApp = async () => {
-    // Если уже standalone — прячем и выходим
-    if (isStandalone()) {
-      hideInstallBtn();
-      return;
-    }
-
-    // Если prompt доступен — показываем системный диалог
-    if (deferredPrompt) {
-      deferredPrompt.prompt();
-      try {
-        await deferredPrompt.userChoice;
-      } catch (_) {}
-      deferredPrompt = null;
-      // после выбора пользователь мог установить — проверим
-      setTimeout(updateInstallUI, 200);
-      return;
-    }
-
-    // Если prompt нет (например iOS Safari) — показываем подсказку
-    toast(t("toast_install_tip"));
+    if (isStandalone()) { hideInstallBtn(); return; }
+    if (!deferredPrompt) { toast(t("toast_install_tip")); return; }
+    deferredPrompt.prompt();
+    try { await deferredPrompt.userChoice; } catch(_) {}
+    deferredPrompt = null;
+    setTimeout(updateInstallUI, 200);
   };
 
-  // ---------- Init ----------
-  const saved = langGet();
-  setLang(saved);
+  // ✅ Lightbox gallery
+  const initLightbox = () => {
+    const grid = $("#galleryGrid");
+    const lb = $("#lightbox");
+    const lbImg = $("#lbImg");
+    const lbCap = $("#lbCap");
+    if (!grid || !lb || !lbImg || !lbCap) return;
 
-  // Year
-  const y = $("#y");
-  if (y) y.textContent = String(new Date().getFullYear());
+    const shots = $$(".shot", grid);
+    const items = shots.map((shot) => {
+      const img = $("img", shot);
+      return {
+        src: img?.getAttribute("src") || "",
+        alt: img?.getAttribute("alt") || "Photo",
+        cap: shot.getAttribute("data-caption") || ""
+      };
+    }).filter(x => x.src);
 
-  // Bind buttons
+    let idx = 0;
+
+    const open = (i) => {
+      idx = (i + items.length) % items.length;
+      const it = items[idx];
+      lbImg.src = it.src;
+      lbImg.alt = it.alt;
+      lbCap.textContent = it.cap || "";
+      lb.classList.add("show");
+      lb.setAttribute("aria-hidden","false");
+      document.body.style.overflow = "hidden";
+    };
+
+    const close = () => {
+      lb.classList.remove("show");
+      lb.setAttribute("aria-hidden","true");
+      document.body.style.overflow = "";
+      // keep src for fast reopen (no blank flash)
+    };
+
+    const prev = () => open(idx - 1);
+    const next = () => open(idx + 1);
+
+    shots.forEach((shot, i) => {
+      shot.addEventListener("click", () => open(i));
+      shot.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") open(i);
+      });
+      shot.tabIndex = 0;
+      shot.setAttribute("role","button");
+      shot.setAttribute("aria-label","Open photo");
+    });
+
+    lb.addEventListener("click", (e) => {
+      const tEl = e.target;
+      if (tEl?.matches("[data-lb-close]") || tEl?.closest("[data-lb-close]")) close();
+      if (tEl?.matches("[data-lb-prev]") || tEl?.closest("[data-lb-prev]")) prev();
+      if (tEl?.matches("[data-lb-next]") || tEl?.closest("[data-lb-next]")) next();
+    });
+
+    document.addEventListener("keydown", (e) => {
+      if (!lb.classList.contains("show")) return;
+      if (e.key === "Escape") close();
+      if (e.key === "ArrowLeft") prev();
+      if (e.key === "ArrowRight") next();
+    });
+  };
+
+  // Init
+  setLang(getLang());
+  $("#y") && ($("#y").textContent = String(new Date().getFullYear()));
+
+  enableRipple();
+  initLightbox();
+  updateInstallUI();
+
+  // Events
   $("#btnRequest")?.addEventListener("click", () => openTelegram(buildMessage(null)));
   $("#btnSend")?.addEventListener("click", () => openTelegram(buildMessage(null)));
-
   $("#btnCopy")?.addEventListener("click", async () => {
     const text = buildMessage(null);
-    try {
-      await navigator.clipboard.writeText(text);
-      toast(t("toast_copied"));
-    } catch {
-      toast("Copy failed");
-    }
+    try { await navigator.clipboard.writeText(text); toast(t("toast_copied")); }
+    catch { toast("Copy failed"); }
   });
 
   $$(".priceCard .btn").forEach((btn) => {
@@ -447,37 +437,23 @@
   $("#btnPay")?.addEventListener("click", openPay);
   $("#btnPay2")?.addEventListener("click", openPay);
   $("#mobPay")?.addEventListener("click", openPay);
-
-  modal?.addEventListener("click", (e) => {
-    const target = e.target;
-    if (target && (target.matches("[data-close]") || target.closest("[data-close]"))) closePay();
+  payModal?.addEventListener("click", (e) => {
+    const tEl = e.target;
+    if (tEl && (tEl.matches("[data-close]") || tEl.closest("[data-close]"))) closePay();
   });
   document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal?.classList.contains("show")) closePay();
+    if (e.key === "Escape" && payModal?.classList.contains("show")) closePay();
   });
 
   $("#btnInstall")?.addEventListener("click", installApp);
-
   $$(".chip").forEach((b) => b.addEventListener("click", () => setLang(b.dataset.lang)));
-
-  // ✅ важное: сразу применяем логику скрытия install-кнопки при запуске
-  // (особенно когда открываешь уже установленное приложение)
-  updateInstallUI();
-
-  // иногда matchMedia меняется динамически (редко, но бывает)
-  try {
-    const mm = window.matchMedia("(display-mode: standalone)");
-    mm?.addEventListener?.("change", updateInstallUI);
-  } catch(_) {}
 
   // Service Worker
   if ("serviceWorker" in navigator) {
-    window.addEventListener("load", () => {
-      navigator.serviceWorker.register("/sw.js").catch(() => {});
-    });
+    window.addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(()=>{}));
   }
 
-  // ---------- Lead form -> Apps Script (submitLead) ----------
+  // Lead form -> Apps Script
   (() => {
     const cfgCRM = window.K2_CRM || {};
     const scriptUrl = (cfgCRM.SCRIPT_URL || "").replace(/\/$/, "");
@@ -486,6 +462,7 @@
     const sendTg = document.getElementById("btnSendTg2");
 
     const buildMsgFromForm = () => {
+      if (!form) return `👋 ${cfg.projectName} Anfrage (Form)`;
       const fd = new FormData(form);
       const obj = Object.fromEntries(fd.entries());
       const lines = [
@@ -499,45 +476,31 @@
       return lines.join("\n");
     };
 
-    if (sendTg) {
-      sendTg.addEventListener("click", () => {
-        try {
-          navigator.clipboard?.writeText(buildMsgFromForm()).catch(() => {});
-          window.open(cfg.telegram, "_blank", "noopener");
-        } catch (_) {}
-      });
-    }
-
+    if (sendTg) sendTg.addEventListener("click", () => openTelegram(buildMsgFromForm()));
     if (!form) return;
 
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-
-      if (!scriptUrl || scriptUrl.indexOf("PASTE_") === 0) {
+      if (!scriptUrl || scriptUrl.startsWith("PASTE_")) {
         toast("Форма не настроена (SCRIPT_URL). Используй Telegram.");
         return;
       }
-
       const fd = new FormData(form);
-      fd.set("lang", langGet());
+      fd.set("lang", getLang());
       fd.set("source", location.href);
 
-      if (btn) btn.disabled = true;
-
+      btn && (btn.disabled = true);
       try {
         const res = await fetch(scriptUrl + "?action=submitLead", { method: "POST", body: fd });
         const json = await res.json().catch(() => null);
-
         if (json && json.ok) {
           toast("Заявка отправлена ✅");
           form.reset();
-        } else {
-          toast("Ошибка отправки");
-        }
+        } else toast("Ошибка отправки");
       } catch (_) {
         toast("Ошибка сети/скрипта");
       } finally {
-        if (btn) btn.disabled = false;
+        btn && (btn.disabled = false);
       }
     });
   })();
